@@ -86,6 +86,8 @@
     font-size:0.7rem; color: var(--sand); letter-spacing:2px;
     text-transform:uppercase; opacity:0.8;
   }
+
+  /* ─── NAV ─── */
   nav {
     display:flex; gap:6px; flex-wrap:wrap;
   }
@@ -98,12 +100,52 @@
     padding:8px 14px; border-radius:6px;
     cursor:pointer; text-transform:uppercase; letter-spacing:1px;
     transition: all .2s;
+    white-space: nowrap;
   }
   nav button:hover, nav button.active {
     background: var(--amber);
     border-color: var(--amber);
     color: var(--dark);
   }
+  .btn-logout-nav {
+    background: rgba(231,76,60,0.2) !important;
+    border-color: var(--danger) !important;
+    color: #ff8a80 !important;
+  }
+  .btn-logout-nav:hover {
+    background: var(--danger) !important;
+    color: #fff !important;
+  }
+  .btn-admin-nav {
+    background: rgba(155,89,182,0.2) !important;
+    border-color: #9b59b6 !important;
+    color: #c39bd3 !important;
+  }
+  .btn-admin-nav:hover {
+    background: #9b59b6 !important;
+    color: #fff !important;
+  }
+
+  /* Admin / Public nav visibility */
+  .nav-admin { display: none; }
+  body.is-admin .nav-admin { display: inline-flex; }
+  body.is-admin .nav-public-only { display: none !important; }
+
+  /* Admin badge */
+  .admin-badge {
+    display: none;
+    background: linear-gradient(135deg, #9b59b6, #6c3483);
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    align-items: center;
+    gap: 5px;
+  }
+  body.is-admin .admin-badge { display: flex; }
 
   /* ─── NET DIVIDER ─── */
   .net-divider {
@@ -184,6 +226,8 @@
   .btn-google { background: #4285F4; color:#fff; }
   .btn-google:hover { background:#2c6de8; }
   .btn-sm { padding:6px 14px; font-size:0.75rem; }
+  .btn-purple { background: #9b59b6; color:#fff; }
+  .btn-purple:hover { background: #8e44ad; }
 
   .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
 
@@ -215,10 +259,14 @@
   }
   .event-date-box .day { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; line-height:1; }
   .event-date-box .month { font-size:0.65rem; font-weight:700; text-transform:uppercase; }
-  .event-info { flex:1; }
+  .event-info { flex:1; min-width:0; }
   .event-info h3 { font-family:'Oswald',sans-serif; font-size:1rem; margin-bottom:4px; }
   .event-info p { font-size:0.8rem; color:var(--gray); margin-bottom:6px; }
   .event-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+
+  /* ─── EVENT PAST ─── */
+  .event-past { opacity: 0.5; }
+  .event-upcoming { border-left: 3px solid var(--amber); }
 
   /* ─── PLAYERS ─── */
   .players-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:14px; }
@@ -292,6 +340,7 @@
     transform: translateY(100px); opacity:0;
     transition: all .3s;
     display:flex; align-items:center; gap:10px;
+    max-width: calc(100vw - 48px);
   }
   #toast.show { transform:translateY(0); opacity:1; }
 
@@ -309,17 +358,34 @@
     background:rgba(0,0,0,0.7); z-index:999;
     align-items:center; justify-content:center;
     backdrop-filter:blur(4px);
+    padding: 16px;
   }
   .modal-overlay.open { display:flex; }
   .modal {
     background: linear-gradient(135deg, var(--court-blue), var(--dark));
     border:1px solid rgba(232,192,96,0.3);
-    border-radius:20px; padding:32px; max-width:560px; width:90%;
+    border-radius:20px; padding:32px; max-width:560px; width:100%;
     max-height:90vh; overflow-y:auto;
     box-shadow:0 24px 80px rgba(0,0,0,0.5);
   }
   .modal h2 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:var(--amber); margin-bottom:24px; }
   .modal-close { float:right; background:none; border:none; color:var(--gray); font-size:1.4rem; cursor:pointer; }
+
+  /* Admin Login Modal */
+  .login-modal {
+    max-width: 400px;
+  }
+  .login-modal .lock-icon {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 16px;
+  }
+  .login-modal .login-hint {
+    font-size: 0.75rem;
+    color: var(--gray);
+    text-align: center;
+    margin-top: 12px;
+  }
 
   /* ─── STATS ─── */
   .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:24px; }
@@ -345,13 +411,81 @@
   .bracket-team.winner { color:var(--amber); font-weight:700; }
   .bracket-team .score { color:var(--amber); font-weight:700; }
 
+  /* ─── PUBLIC EVENTS BANNER ─── */
+  .next-event-banner {
+    background: linear-gradient(135deg, rgba(232,160,32,0.2), rgba(74,158,221,0.1));
+    border: 2px solid rgba(232,192,96,0.4);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .next-event-banner .banner-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--amber);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .next-event-banner h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+  }
+  .next-event-banner .banner-icon {
+    font-size: 2.5rem;
+    flex-shrink: 0;
+  }
+
   /* ─── RESPONSIVE ─── */
-  @media(max-width:600px){
-    .header-inner { padding:12px 16px; }
+  @media(max-width:768px) {
+    .header-inner {
+      padding:12px 16px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    nav {
+      width: 100%;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav::-webkit-scrollbar { height: 3px; }
+    nav::-webkit-scrollbar-thumb { background: rgba(232,192,96,0.4); border-radius:3px; }
     .logo-text h1 { font-size:1.6rem; }
     nav button { font-size:0.65rem; padding:7px 10px; }
-    .weekly-grid { grid-template-columns:repeat(4,1fr); }
-    .section-title { font-size:1.5rem; }
+    .weekly-grid { grid-template-columns:repeat(3,1fr); }
+    .section-title { font-size:1.4rem; }
+    .card { padding: 16px; }
+    .form-grid { grid-template-columns: 1fr; }
+    main { padding: 16px 12px; }
+    .event-item { flex-direction: column; }
+    .event-date-box { width: 100%; display: flex; gap: 8px; align-items: center; border-radius: 8px; padding: 8px 14px; }
+    .event-date-box .day { font-size: 1.4rem; }
+    .event-date-box .month { font-size: 0.7rem; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .players-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
+    .training-grid { grid-template-columns: 1fr; }
+    .rules-grid { grid-template-columns: 1fr; }
+    .modal { padding: 20px 16px; }
+    .modal h2 { font-size: 1.4rem; }
+    .next-event-banner { flex-direction: column; gap: 12px; }
+  }
+
+  @media(max-width:480px) {
+    .logo-ball { width: 44px; height: 44px; }
+    .logo-text h1 { font-size: 1.3rem; }
+    .logo-text p { font-size: 0.6rem; }
+    .section-title { font-size: 1.2rem; letter-spacing: 2px; }
+    .stat-num { font-size: 1.8rem; }
+    .weekly-grid { grid-template-columns: repeat(3,1fr); }
+    .btn { padding: 10px 16px; font-size: 0.8rem; }
+    .training-grid { grid-template-columns: 1fr; }
   }
 
   /* Decorative volleyball net in background */
@@ -369,10 +503,11 @@
   }
   .fb1 { width:300px; height:300px; top:10%; right:-80px; background:radial-gradient(circle, var(--amber), transparent); animation: float1 12s ease-in-out infinite; }
   .fb2 { width:200px; height:200px; bottom:15%; left:-60px; background:radial-gradient(circle, var(--sky), transparent); animation: float2 15s ease-in-out infinite; }
+
   @keyframes float1 { 0%,100%{transform:translateY(0);} 50%{transform:translateY(30px);} }
   @keyframes float2 { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-24px);} }
 
-  /* Scroll area */
+  /* Scroll */
   ::-webkit-scrollbar { width:6px; }
   ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
   ::-webkit-scrollbar-thumb { background:var(--amber); border-radius:4px; }
@@ -401,6 +536,40 @@
     display:flex; align-items:center; gap:6px; cursor:pointer;
   }
   .tag span { font-size:1rem; line-height:1; }
+
+  /* ─── TREINOS GRADE SEMANAL 3 colunas mobile ─── */
+  .grade-3col {
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:14px;
+  }
+  @media(max-width:480px){
+    .grade-3col { grid-template-columns: 1fr; }
+  }
+
+  /* ─── PLANO SEMANAL ─── */
+  .plano-linha {
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:16px;
+    align-items:start;
+    padding:12px 0;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  @media(max-width:480px){
+    .plano-linha { grid-template-columns: 1fr; gap: 4px; }
+  }
+  .plano-linha:last-child { border-bottom: none; }
+
+  /* ─── SENHA INPUT ─── */
+  .pass-container { position: relative; }
+  .pass-container input { width: 100%; padding-right: 44px; }
+  .pass-toggle {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer;
+    color: var(--gray); font-size: 1rem;
+  }
+
 </style>
 </head>
 <body>
@@ -414,15 +583,24 @@
       <div class="logo-ball"></div>
       <div class="logo-text">
         <h1>🏐 VolêiBros</h1>
-        <p>Agenda · Treinos · Torneios · Regras</p>
+        <p id="subtitleText">Treinos · Regras · Próximos Eventos</p>
       </div>
+      <div class="admin-badge">👑 Admin</div>
     </div>
-    <nav>
-      <button class="active" onclick="showTab('agenda')">📅 Agenda</button>
-      <button onclick="showTab('jogadores')">👥 Jogadores</button>
-      <button onclick="showTab('treinos')">💪 Treinos</button>
-      <button onclick="showTab('regras')">📖 Regras</button>
-      <button onclick="showTab('torneios')">🏆 Torneios</button>
+    <nav id="mainNav">
+      <!-- PUBLIC NAV -->
+      <button class="nav-public-only active" onclick="showTab('eventos', this)">📅 Próximos Eventos</button>
+      <button class="nav-public-only" onclick="showTab('treinos', this)">💪 Treinos</button>
+      <button class="nav-public-only" onclick="showTab('regras', this)">📖 Regras</button>
+      <button class="nav-public-only btn-admin-nav" onclick="openAdminLogin()">🔐 Admin</button>
+
+      <!-- ADMIN NAV -->
+      <button class="nav-admin" onclick="showTab('agenda', this)">📅 Agenda</button>
+      <button class="nav-admin" onclick="showTab('jogadores', this)">👥 Jogadores</button>
+      <button class="nav-admin" onclick="showTab('torneios', this)">🏆 Torneios</button>
+      <button class="nav-admin" onclick="showTab('treinos', this)">💪 Treinos</button>
+      <button class="nav-admin" onclick="showTab('regras', this)">📖 Regras</button>
+      <button class="nav-admin btn-logout-nav" onclick="logout()">🔒 Sair</button>
     </nav>
   </div>
 </header>
@@ -430,8 +608,50 @@
 
 <main>
 
-<!-- ═══════════════════ AGENDA ═══════════════════ -->
-<div id="tab-agenda" class="tab active">
+<!-- ═══════════════════ PRÓXIMOS EVENTOS (PÚBLICO) ═══════════════════ -->
+<div id="tab-eventos" class="tab active">
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num" id="pubStatJogos">0</div><div class="stat-label">Jogos</div></div>
+    <div class="stat-box"><div class="stat-num" id="pubStatTorneios">0</div><div class="stat-label">Torneios</div></div>
+    <div class="stat-box"><div class="stat-num" id="pubStatTreinos">0</div><div class="stat-label">Treinos</div></div>
+    <div class="stat-box"><div class="stat-num" id="pubStatJogadores">0</div><div class="stat-label">Jogadores</div></div>
+  </div>
+
+  <!-- Grade Semanal fixa -->
+  <div class="card">
+    <div class="card-title">🗓️ Grade Semanal de Treinos (Seg / Qua / Sex)</div>
+    <div class="grade-3col">
+      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEGUNDA</div>
+        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
+        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
+      </div>
+      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">QUARTA</div>
+        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
+        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
+      </div>
+      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEXTA</div>
+        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
+        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
+        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">🏐 Próximos Eventos</div>
+  <div class="event-list" id="publicEventList">
+    <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">
+      Nenhum evento cadastrado ainda. 🏐
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ AGENDA (ADMIN) ═══════════════════ -->
+<div id="tab-agenda" class="tab">
   <div class="stats-row" id="statsRow">
     <div class="stat-box"><div class="stat-num" id="statJogos">0</div><div class="stat-label">Jogos</div></div>
     <div class="stat-box"><div class="stat-num" id="statTorneios">0</div><div class="stat-label">Torneios</div></div>
@@ -497,10 +717,10 @@
     </div>
   </div>
 
-  <!-- Treinos fixos da semana -->
+  <!-- Grade Semanal -->
   <div class="card">
     <div class="card-title">🗓️ Grade Semanal de Treinos (Seg / Qua / Sex)</div>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+    <div class="grade-3col">
       <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
         <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEGUNDA</div>
         <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
@@ -522,7 +742,7 @@
     </div>
   </div>
 
-  <div class="section-title">🏐 Próximos Eventos</div>
+  <div class="section-title">🏐 Todos os Eventos</div>
   <div class="event-list" id="eventList">
     <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">
       Nenhum evento cadastrado ainda. Adicione um acima! 🏐
@@ -530,7 +750,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════ JOGADORES ═══════════════════ -->
+<!-- ═══════════════════ JOGADORES (ADMIN) ═══════════════════ -->
 <div id="tab-jogadores" class="tab">
   <div class="card">
     <div class="card-title">➕ Cadastrar Jogador</div>
@@ -571,7 +791,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════ TREINOS ═══════════════════ -->
+<!-- ═══════════════════ TREINOS (PÚBLICO + ADMIN) ═══════════════════ -->
 <div id="tab-treinos" class="tab">
   <div class="section-title">💪 Plano de Treinos Completo</div>
   <p style="color:var(--gray);margin-bottom:24px;font-size:0.9rem;">Treinos nas segundas, quartas e sextas — 19h às 20h30 na Escola</p>
@@ -791,19 +1011,18 @@
 
   </div>
 
-  <!-- Plano semanal estruturado -->
   <div class="section-title" style="margin-top:32px;">📆 Plano Semanal Estruturado</div>
   <div class="card">
     <div style="display:grid;gap:10px;">
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="plano-linha">
         <div style="font-family:'Bebas Neue';font-size:1rem;color:#27ae60;">SEGUNDA</div>
         <div style="font-size:0.85rem;color:var(--sand);">Aquecimento (5') → Recepção de saque (20') → Ataque por zona (20') → Jogo livre (30') → Alongamento (5')</div>
       </div>
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div class="plano-linha">
         <div style="font-family:'Bebas Neue';font-size:1rem;color:#27ae60;">QUARTA</div>
         <div style="font-size:0.85rem;color:var(--sand);">Aquecimento (5') → Bloqueio (20') → Defesa / Rolamento (20') → Fundamentos de toque (15') → Jogo situacional (20') → Alongamento (5')</div>
       </div>
-      <div style="display:grid;grid-template-columns:120px 1fr;gap:16px;align-items:start;padding:12px 0;">
+      <div class="plano-linha">
         <div style="font-family:'Bebas Neue';font-size:1rem;color:#27ae60;">SEXTA</div>
         <div style="font-size:0.85rem;color:var(--sand);">Aquecimento (5') → Condicionamento físico (20') → Treino integrado (ataque + recepção) (20') → Jogo completo 5x5 (35') → Alongamento final (5')</div>
       </div>
@@ -811,7 +1030,7 @@
   </div>
 </div>
 
-<!-- ═══════════════════ REGRAS ═══════════════════ -->
+<!-- ═══════════════════ REGRAS (PÚBLICO + ADMIN) ═══════════════════ -->
 <div id="tab-regras" class="tab">
   <div class="section-title">📖 Regras Oficiais do Vôlei</div>
 
@@ -826,7 +1045,6 @@
         <li>Linha central: divide as duas quadras ao meio</li>
       </ul>
     </div>
-
     <div class="rule-card">
       <h3>🏐 O Jogo</h3>
       <ul>
@@ -837,7 +1055,6 @@
         <li>Substituições: até 6 por set (líbero não conta)</li>
       </ul>
     </div>
-
     <div class="rule-card">
       <h3>📊 Pontuação (Rally Point)</h3>
       <ul>
@@ -848,19 +1065,16 @@
         <li>Trocar de lado no 5º set a cada 8 pontos</li>
       </ul>
     </div>
-
     <div class="rule-card">
       <h3>❌ Infrações (faltas)</h3>
       <ul>
         <li>Pisar ou cruzar a linha central pelo lado de baixo da rede</li>
         <li>Tocar na rede ao atacar ou bloquear</li>
         <li>Bola cai fora das linhas da quadra</li>
-        <li>Jogador toca a bola com parte do corpo abaixo da cintura (vôlei de quadra — proibido nas antigas regras, hoje permitido desde que seja involuntário e não haja retenção)</li>
         <li>Segurar ou conduzir a bola (retenção)</li>
         <li>Erro de rotação ou de posição no momento do saque</li>
       </ul>
     </div>
-
     <div class="rule-card">
       <h3>🏅 Saque</h3>
       <ul>
@@ -871,43 +1085,32 @@
         <li>Jogador tem 8 segundos após apito do árbitro para sacar</li>
       </ul>
     </div>
-
     <div class="rule-card">
       <h3>🤸 O Líbero</h3>
       <ul>
         <li>Jogador especializado em defesa — usa colete de cor diferente</li>
         <li>Não pode sacar, bloquear ou atacar acima da rede</li>
-        <li>Pode substituir qualquer jogador na zona de defesa (linhas 1, 5 e 6) sem contar na cota de substituições</li>
+        <li>Pode substituir qualquer jogador na zona de defesa sem contar nas substituições</li>
         <li>Trocas do líbero só acontecem entre rallies</li>
         <li>Se ele fizer toque (manchete) acima da rede, o ataque é inválido</li>
       </ul>
     </div>
   </div>
 
-  <!-- CHAVES -->
   <div class="section-title" style="margin-top:32px;">🏆 Sistemas de Chaveamento</div>
-
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;">
-
     <div class="card">
       <div class="card-title">🔑 Chave de 3 Times</div>
       <div style="font-size:0.85rem;color:var(--sand);line-height:1.8;margin-bottom:16px;">
-        <p><strong style="color:var(--amber);">Formato:</strong> Todos jogam contra todos (turno único).</p>
-        <br>
+        <p><strong style="color:var(--amber);">Formato:</strong> Todos jogam contra todos (turno único).</p><br>
         <p>• A vs B → vencedor + 1 ponto</p>
         <p>• A vs C → vencedor + 1 ponto</p>
-        <p>• B vs C → vencedor + 1 ponto</p>
-        <br>
-        <p><strong style="color:var(--amber);">Classificação:</strong> Por vitórias → saldo de sets → saldo de pontos</p>
-        <br>
-        <p><strong style="color:var(--amber);">Critério de desempate (3 times com 1 vitória cada):</strong></p>
+        <p>• B vs C → vencedor + 1 ponto</p><br>
+        <p><strong style="color:var(--amber);">Classificação:</strong> Por vitórias → saldo de sets → saldo de pontos</p><br>
+        <p><strong style="color:var(--amber);">Critério de desempate:</strong></p>
         <p>→ Confronto direto entre os empatados</p>
         <p>→ Quociente de sets (sets ganhos ÷ sets perdidos)</p>
-        <p>→ Quociente de pontos</p>
         <p>→ Sorteio (último recurso)</p>
-        <br>
-        <p><strong style="color:#27ae60);">✅ Vantagem:</strong> Todos jogam pelo menos 2 partidas</p>
-        <p><strong style="color:var(--danger);">⚠️ Desvantagem:</strong> Não classifica todos; apenas 1 ou 2 avançam</p>
       </div>
       <div class="bracket-container">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
@@ -930,22 +1133,15 @@
     <div class="card">
       <div class="card-title">🔑 Chave de 4 Times</div>
       <div style="font-size:0.85rem;color:var(--sand);line-height:1.8;margin-bottom:16px;">
-        <p><strong style="color:var(--amber);">Dois formatos comuns:</strong></p>
-        <br>
+        <p><strong style="color:var(--amber);">Dois formatos comuns:</strong></p><br>
         <p><strong>1) Round Robin (todos contra todos)</strong></p>
-        <p>6 jogos no total (A×B, A×C, A×D, B×C, B×D, C×D)</p>
-        <p>Classificam os 2 primeiros para final</p>
-        <br>
-        <p><strong>2) Fase de grupos + Eliminatória (mais comum)</strong></p>
+        <p>6 jogos no total. Classificam os 2 primeiros para final.</p><br>
+        <p><strong>2) Fase de grupos + Eliminatória</strong></p>
         <p>• 1ª fase: A vs B e C vs D</p>
         <p>• Semifinal: 1ºA vs 2ºC e 1ºC vs 2ºA</p>
-        <p>• Final: vencedores se enfrentam</p>
-        <p>• Disputa de 3º lugar (opcional)</p>
-        <br>
+        <p>• Final: vencedores se enfrentam</p><br>
         <p><strong style="color:var(--amber);">Critério de desempate:</strong></p>
         <p>→ Saldo de sets → Saldo de pontos → Confronto direto</p>
-        <br>
-        <p><strong style="color:#27ae60;">✅ Vantagem:</strong> Dinâmico, todos competem muito</p>
       </div>
       <div class="bracket-container">
         <div class="bracket">
@@ -978,10 +1174,8 @@
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- Regulamentos gerais -->
   <div class="section-title" style="margin-top:32px;">📋 Regulamentos Gerais de Torneio</div>
   <div class="card">
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
@@ -991,7 +1185,7 @@
       </div>
       <div>
         <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">⏸️ Tempos Técnicos</div>
-        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">2 tempos por set (30 seg cada) + paradas automáticas aos 8 e 16 pontos nos sets de 25. Cada técnico pode pedir seus 2 tempos quando quiser.</p>
+        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">2 tempos por set (30 seg cada) + paradas automáticas aos 8 e 16 pontos nos sets de 25.</p>
       </div>
       <div>
         <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">👕 Uniformes</div>
@@ -999,17 +1193,15 @@
       </div>
       <div>
         <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">📝 Protesto</div>
-        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">Capitão pode questionar a interpretação de regras ao árbitro imediatamente após o ponto. Não é cabível protesto por julgamento de fato (se a bola caiu dentro ou fora).</p>
+        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">Capitão pode questionar a interpretação de regras ao árbitro imediatamente após o ponto. Não é cabível protesto por julgamento de fato.</p>
       </div>
     </div>
   </div>
-
 </div>
 
-<!-- ═══════════════════ TORNEIOS ═══════════════════ -->
+<!-- ═══════════════════ TORNEIOS (ADMIN) ═══════════════════ -->
 <div id="tab-torneios" class="tab">
   <div class="section-title">🏆 Gerenciar Torneios</div>
-
   <div class="card">
     <div class="card-title">➕ Criar Torneio</div>
     <div class="form-grid">
@@ -1039,7 +1231,6 @@
       <button class="btn btn-primary" onclick="addTorneio()">✅ Criar Torneio</button>
     </div>
   </div>
-
   <div class="section-title">📋 Torneios Cadastrados</div>
   <div id="torneioList">
     <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum torneio criado ainda 🏆</div>
@@ -1061,24 +1252,134 @@
   </div>
 </div>
 
+<!-- ─── MODAL LOGIN ADMIN ─── -->
+<div class="modal-overlay" id="adminLoginModal">
+  <div class="modal login-modal">
+    <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
+    <div class="lock-icon">🔐</div>
+    <h2 style="text-align:center;">Área Admin</h2>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Senha</label>
+      <div class="pass-container">
+        <input id="adminPassInput" type="password" placeholder="Digite a senha de admin" onkeydown="if(event.key==='Enter')login()">
+        <button class="pass-toggle" onclick="togglePassVis()" type="button">👁</button>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:0;">
+      <button class="btn btn-primary" style="width:100%;" onclick="login()">🔓 Entrar</button>
+    </div>
+    <p class="login-hint">Senha padrão: <strong>admin123</strong></p>
+    <hr style="border-color:rgba(255,255,255,0.1);margin:20px 0;">
+    <div id="changePassSection">
+      <div class="card-title" style="font-size:0.85rem;margin-bottom:12px;">🔑 Alterar Senha (se já logado)</div>
+      <div class="form-group" style="margin-bottom:8px;">
+        <label>Senha Atual</label>
+        <input id="curPassInput" type="password" placeholder="Senha atual">
+      </div>
+      <div class="form-group" style="margin-bottom:8px;">
+        <label>Nova Senha</label>
+        <input id="newPassInput" type="password" placeholder="Nova senha">
+      </div>
+      <button class="btn btn-success btn-sm" onclick="changePassword()">💾 Salvar Nova Senha</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div id="toast">✅ <span id="toastMsg">Ação realizada!</span></div>
 
 <script>
 // ─── STATE ───
-let players = JSON.parse(localStorage.getItem('vb_players') || '[]');
-let events  = JSON.parse(localStorage.getItem('vb_events')  || '[]');
+let players  = JSON.parse(localStorage.getItem('vb_players')  || '[]');
+let events   = JSON.parse(localStorage.getItem('vb_events')   || '[]');
 let torneios = JSON.parse(localStorage.getItem('vb_torneios') || '[]');
 let selectedParticipants = [];
 let currentEvent = null;
 
+// ─── ADMIN ───
+const DEFAULT_ADMIN_PASS = 'admin123';
+function getAdminPass() {
+  return localStorage.getItem('vb_admin_pass') || DEFAULT_ADMIN_PASS;
+}
+// Persiste sessão admin na sessionStorage (limpa ao fechar browser)
+let isAdmin = sessionStorage.getItem('vb_admin') === 'yes';
+
+function openAdminLogin() {
+  document.getElementById('adminPassInput').value = '';
+  document.getElementById('curPassInput').value = '';
+  document.getElementById('newPassInput').value = '';
+  document.getElementById('adminLoginModal').classList.add('open');
+  setTimeout(() => document.getElementById('adminPassInput').focus(), 200);
+}
+
+function login() {
+  const pass = document.getElementById('adminPassInput').value;
+  if (pass === getAdminPass()) {
+    isAdmin = true;
+    sessionStorage.setItem('vb_admin', 'yes');
+    closeModal('adminLoginModal');
+    applyAdminState();
+    showTabByName('agenda');
+    toast('👑 Bem-vindo, Admin!');
+  } else {
+    toast('❌ Senha incorreta!', 'error');
+    document.getElementById('adminPassInput').select();
+  }
+}
+
+function logout() {
+  isAdmin = false;
+  sessionStorage.removeItem('vb_admin');
+  applyAdminState();
+  showTabByName('eventos');
+  toast('🔒 Sessão admin encerrada');
+}
+
+function changePassword() {
+  const cur = document.getElementById('curPassInput').value;
+  const novo = document.getElementById('newPassInput').value.trim();
+  if (cur !== getAdminPass()) { toast('Senha atual incorreta!', 'error'); return; }
+  if (novo.length < 4) { toast('Nova senha muito curta (mín. 4 caracteres)!', 'error'); return; }
+  localStorage.setItem('vb_admin_pass', novo);
+  document.getElementById('curPassInput').value = '';
+  document.getElementById('newPassInput').value = '';
+  toast('✅ Senha alterada com sucesso!');
+}
+
+function togglePassVis() {
+  const inp = document.getElementById('adminPassInput');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function applyAdminState() {
+  if (isAdmin) {
+    document.body.classList.add('is-admin');
+    document.getElementById('subtitleText').textContent = 'Agenda · Treinos · Torneios · Regras';
+  } else {
+    document.body.classList.remove('is-admin');
+    document.getElementById('subtitleText').textContent = 'Treinos · Regras · Próximos Eventos';
+  }
+}
+
 // ─── TABS ───
-function showTab(name) {
+function showTab(name, btn) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + name).classList.add('active');
-  event.target.classList.add('active');
+  const el = document.getElementById('tab-' + name);
+  if (el) el.classList.add('active');
+  if (btn) btn.classList.add('active');
   renderAll();
+}
+
+function showTabByName(name) {
+  // Find button for this tab name and simulate click
+  const allBtns = document.querySelectorAll('nav button');
+  let found = null;
+  allBtns.forEach(b => {
+    const oc = b.getAttribute('onclick') || '';
+    if (oc.includes("'" + name + "'")) found = b;
+  });
+  showTab(name, found);
 }
 
 // ─── TOAST ───
@@ -1092,17 +1393,17 @@ function toast(msg, type='success') {
 
 // ─── SAVE ───
 function save() {
-  localStorage.setItem('vb_players', JSON.stringify(players));
-  localStorage.setItem('vb_events',  JSON.stringify(events));
+  localStorage.setItem('vb_players',  JSON.stringify(players));
+  localStorage.setItem('vb_events',   JSON.stringify(events));
   localStorage.setItem('vb_torneios', JSON.stringify(torneios));
 }
 
 // ─── PLAYERS ───
 function addPlayer() {
-  const nome = document.getElementById('pNome').value.trim();
-  const apelido = document.getElementById('pApelido').value.trim();
+  const nome     = document.getElementById('pNome').value.trim();
+  const apelido  = document.getElementById('pApelido').value.trim();
   const whatsapp = document.getElementById('pWhatsapp').value.trim();
-  const posicao = document.getElementById('pPosicao').value;
+  const posicao  = document.getElementById('pPosicao').value;
   if (!nome || !whatsapp) { toast('Preencha nome e WhatsApp!', 'error'); return; }
   players.push({ id: Date.now(), nome, apelido: apelido || nome, whatsapp, posicao });
   save(); renderAll();
@@ -1114,7 +1415,11 @@ function addPlayer() {
 
 function renderPlayers() {
   const grid = document.getElementById('playerGrid');
-  if (!players.length) { grid.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;grid-column:1/-1;">Nenhum jogador cadastrado ainda 🏐</div>'; return; }
+  if (!grid) return;
+  if (!players.length) {
+    grid.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;grid-column:1/-1;">Nenhum jogador cadastrado ainda 🏐</div>';
+    return;
+  }
   grid.innerHTML = players.map(p => `
     <div class="player-card">
       <div class="player-avatar">${p.apelido[0].toUpperCase()}</div>
@@ -1149,6 +1454,7 @@ function toggleMultiselect() {
 
 function renderMultiselect() {
   const dd = document.getElementById('participantesDropdown');
+  if (!dd) return;
   dd.innerHTML = players.map(p => `
     <label class="multiselect-option">
       <input type="checkbox" value="${p.id}" onchange="toggleParticipant(${p.id})"
@@ -1169,6 +1475,7 @@ function toggleParticipant(id) {
 
 function renderSelectedTags() {
   const tags = document.getElementById('selectedTags');
+  if (!tags) return;
   tags.innerHTML = selectedParticipants.map(id => {
     const p = players.find(x => x.id === id);
     return p ? `<div class="tag" onclick="toggleParticipant(${id})">${p.apelido} <span>✕</span></div>` : '';
@@ -1185,56 +1492,79 @@ document.addEventListener('click', e => {
 function updateEvForm() {}
 
 function addEvent() {
-  const tipo = document.getElementById('evTipo').value;
-  const nome = document.getElementById('evNome').value.trim();
-  const data = document.getElementById('evData').value;
-  const hora = document.getElementById('evHora').value;
-  const local = document.getElementById('evLocal').value.trim();
-  const modalidade = document.getElementById('evModalidade').value;
-  const obs = document.getElementById('evObs').value.trim();
+  const tipo      = document.getElementById('evTipo').value;
+  const nome      = document.getElementById('evNome').value.trim();
+  const data      = document.getElementById('evData').value;
+  const hora      = document.getElementById('evHora').value;
+  const local     = document.getElementById('evLocal').value.trim();
+  const modalidade= document.getElementById('evModalidade').value;
+  const obs       = document.getElementById('evObs').value.trim();
   if (!nome || !data) { toast('Preencha nome e data!', 'error'); return; }
   const ev = { id: Date.now(), tipo, nome, data, hora, local, modalidade, obs, participantes: [...selectedParticipants] };
   events.push(ev);
   selectedParticipants = [];
   renderSelectedTags();
   save(); renderAll();
-  document.getElementById('evNome').value = '';
-  document.getElementById('evData').value = '';
-  document.getElementById('evHora').value = '';
+  document.getElementById('evNome').value  = '';
+  document.getElementById('evData').value  = '';
+  document.getElementById('evHora').value  = '';
   document.getElementById('evLocal').value = '';
-  document.getElementById('evObs').value = '';
+  document.getElementById('evObs').value   = '';
   toast('Evento adicionado! 📅');
 }
 
-function renderEvents() {
-  const list = document.getElementById('eventList');
-  const sorted = [...events].sort((a,b) => a.data.localeCompare(b.data));
-  if (!sorted.length) { list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum evento cadastrado ainda. Adicione um acima! 🏐</div>'; return; }
-  list.innerHTML = sorted.map(ev => {
-    const dt = new Date(ev.data + 'T00:00:00');
-    const d = dt.getDate().toString().padStart(2,'0');
-    const m = dt.toLocaleString('pt-BR',{month:'short'}).toUpperCase();
-    const parts = ev.participantes.map(id => players.find(p => p.id === id)?.apelido || '').filter(Boolean);
-    return `
-    <div class="event-item" onclick="openEvent(${ev.id})">
+function buildEventHTML(ev, showActions) {
+  const dt = new Date(ev.data + 'T00:00:00');
+  const d  = dt.getDate().toString().padStart(2,'0');
+  const m  = dt.toLocaleString('pt-BR',{month:'short'}).toUpperCase();
+  const parts = ev.participantes.map(id => players.find(p => p.id === id)?.apelido || '').filter(Boolean);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const isPast = dt < today;
+  const classNames = ['event-item', isPast ? 'event-past' : 'event-upcoming'].join(' ');
+  const actionsHTML = showActions ? `
+    <div class="event-actions">
+      <button class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation();sendWhatsappEvent(${ev.id})">📲 WhatsApp</button>
+      <button class="btn btn-google btn-sm" onclick="event.stopPropagation();addGCalEvent(${ev.id})">📅 Google</button>
+      <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeEvent(${ev.id})">✕</button>
+    </div>` : '';
+  return `
+    <div class="${classNames}" onclick="openEvent(${ev.id})">
       <div class="event-date-box">
         <div class="day">${d}</div>
         <div class="month">${m}</div>
       </div>
       <div class="event-info">
-        <div style="margin-bottom:6px;"><span class="badge badge-${ev.tipo}">${ev.tipo}</span></div>
+        <div style="margin-bottom:6px;"><span class="badge badge-${ev.tipo}">${ev.tipo}</span>${isPast ? ' <span style="font-size:0.7rem;color:var(--gray);">(passado)</span>' : ''}</div>
         <h3>${ev.nome}</h3>
         <p>🕐 ${ev.hora || '—'} &nbsp;|&nbsp; 📍 ${ev.local || '—'} &nbsp;|&nbsp; 🏐 ${ev.modalidade || '—'}</p>
         ${parts.length ? `<p>👥 ${parts.join(', ')}</p>` : ''}
         ${ev.obs ? `<p style="color:var(--gray);font-style:italic;">${ev.obs}</p>` : ''}
-        <div class="event-actions">
-          <button class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation();sendWhatsappEvent(${ev.id})">📲 WhatsApp</button>
-          <button class="btn btn-google btn-sm" onclick="event.stopPropagation();addGCalEvent(${ev.id})">📅 Google</button>
-          <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeEvent(${ev.id})">✕</button>
-        </div>
+        ${actionsHTML}
       </div>
     </div>`;
-  }).join('');
+}
+
+function renderEvents() {
+  const list = document.getElementById('eventList');
+  if (!list) return;
+  const sorted = [...events].sort((a,b) => a.data.localeCompare(b.data));
+  if (!sorted.length) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum evento cadastrado ainda. Adicione um acima! 🏐</div>';
+    return;
+  }
+  list.innerHTML = sorted.map(ev => buildEventHTML(ev, true)).join('');
+}
+
+function renderPublicEvents() {
+  const list = document.getElementById('publicEventList');
+  if (!list) return;
+  const today = new Date(); today.setHours(0,0,0,0);
+  const sorted = [...events].sort((a,b) => a.data.localeCompare(b.data));
+  if (!sorted.length) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum evento cadastrado ainda. 🏐</div>';
+    return;
+  }
+  list.innerHTML = sorted.map(ev => buildEventHTML(ev, false)).join('');
 }
 
 function removeEvent(id) {
@@ -1262,11 +1592,18 @@ function openEvent(id) {
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
 // ─── WHATSAPP ───
 function buildMsg(ev) {
   const dt = new Date(ev.data + 'T00:00:00').toLocaleDateString('pt-BR');
   const tipoEmoji = { jogo:'🏐', torneio:'🏆', treino:'💪' };
-  return `${tipoEmoji[ev.tipo] || '🏐'} *VolêiBros — ${ev.tipo.toUpperCase()}*\n\n📌 *${ev.nome}*\n📅 Data: ${dt}\n🕐 Horário: ${ev.hora || '—'}\n📍 Local: ${ev.local || '—'}\n🏐 Modalidade: ${ev.modalidade || '—'}\n\n${ev.obs ? '📝 ' + ev.obs + '\n\n' : ''}Contando com a presença de todos! 💪🏐`;
+  return `${tipoEmoji[ev.tipo]||'🏐'} *VolêiBros — ${ev.tipo.toUpperCase()}*\n\n📌 *${ev.nome}*\n📅 Data: ${dt}\n🕐 Horário: ${ev.hora||'—'}\n📍 Local: ${ev.local||'—'}\n🏐 Modalidade: ${ev.modalidade||'—'}\n\n${ev.obs?'📝 '+ev.obs+'\n\n':''}Contando com a presença de todos! 💪🏐`;
 }
 
 function sendWhatsappEvent(id) {
@@ -1275,10 +1612,7 @@ function sendWhatsappEvent(id) {
   const parts = ev.participantes.map(pid => players.find(p => p.id === pid)).filter(Boolean);
   if (!parts.length) { toast('Nenhum participante neste evento!', 'error'); return; }
   const msg = buildMsg(ev);
-  parts.forEach(p => {
-    const url = `https://wa.me/55${p.whatsapp}?text=${encodeURIComponent(msg)}`;
-    window.open(url, '_blank');
-  });
+  parts.forEach(p => window.open(`https://wa.me/55${p.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank'));
   toast(`📲 WhatsApp aberto para ${parts.length} participante(s)!`);
 }
 
@@ -1298,15 +1632,15 @@ function addGCalEvent(id) {
   const ev = events.find(e => e.id === id);
   if (!ev) return;
   const parts = ev.participantes.map(pid => players.find(p => p.id === pid)).filter(Boolean);
-  const dt = ev.data.replace(/-/g,'');
-  const hora = ev.hora ? ev.hora.replace(':','') : '1900';
+  const dt    = ev.data.replace(/-/g,'');
+  const hora  = ev.hora ? ev.hora.replace(':','') : '1900';
   const start = dt + 'T' + hora + '00';
-  const h = parseInt(hora.slice(0,2));
-  const endHora = (h+2).toString().padStart(2,'0') + hora.slice(2);
-  const end = dt + 'T' + endHora + '00';
-  const noticeList = parts.length ? `\nParticipantes notificados via WhatsApp: ${parts.map(p=>p.apelido).join(', ')}` : '';
-  const details = `Evento: ${ev.tipo} — ${ev.modalidade}\nLocal: ${ev.local || '—'}${noticeList}${ev.obs ? '\n' + ev.obs : ''}`;
-  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.nome)}&dates=${start}/${end}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(ev.local || '')}`;
+  const h     = parseInt(hora.slice(0,2));
+  const endH  = (h+2).toString().padStart(2,'0') + hora.slice(2);
+  const end   = dt + 'T' + endH + '00';
+  const noticeList = parts.length ? `\nParticipantes: ${parts.map(p=>p.apelido).join(', ')}` : '';
+  const details = `Evento: ${ev.tipo} — ${ev.modalidade}\nLocal: ${ev.local||'—'}${noticeList}${ev.obs?'\n'+ev.obs:''}`;
+  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.nome)}&dates=${start}/${end}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(ev.local||'')}`;
   window.open(url, '_blank');
   toast('📅 Google Agenda aberto!');
 }
@@ -1318,22 +1652,26 @@ function addGoogleCalendar() {
 
 // ─── TORNEIOS ───
 function addTorneio() {
-  const nome = document.getElementById('tNome').value.trim();
-  const data = document.getElementById('tData').value;
-  const local = document.getElementById('tLocal').value.trim();
+  const nome    = document.getElementById('tNome').value.trim();
+  const data    = document.getElementById('tData').value;
+  const local   = document.getElementById('tLocal').value.trim();
   const formato = document.getElementById('tFormato').value;
   if (!nome || !data) { toast('Preencha nome e data!', 'error'); return; }
   torneios.push({ id: Date.now(), nome, data, local, formato });
   save(); renderTorneios();
-  document.getElementById('tNome').value = '';
-  document.getElementById('tData').value = '';
+  document.getElementById('tNome').value  = '';
+  document.getElementById('tData').value  = '';
   document.getElementById('tLocal').value = '';
   toast('Torneio criado! 🏆');
 }
 
 function renderTorneios() {
   const list = document.getElementById('torneioList');
-  if (!torneios.length) { list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum torneio criado ainda 🏆</div>'; return; }
+  if (!list) return;
+  if (!torneios.length) {
+    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum torneio criado ainda 🏆</div>';
+    return;
+  }
   const fmt = { chave3:'Chave de 3 times', chave4:'Chave de 4 times', dupla:'Duplas', livre:'Livre' };
   list.innerHTML = torneios.map(t => {
     const dt = new Date(t.data+'T00:00:00').toLocaleDateString('pt-BR');
@@ -1358,26 +1696,53 @@ function removeTorneio(id) {
 
 // ─── STATS ───
 function renderStats() {
-  document.getElementById('statJogos').textContent = events.filter(e=>e.tipo==='jogo').length;
-  document.getElementById('statTorneios').textContent = events.filter(e=>e.tipo==='torneio').length + torneios.length;
-  document.getElementById('statTreinos').textContent = events.filter(e=>e.tipo==='treino').length;
-  document.getElementById('statJogadores').textContent = players.length;
+  const jg = events.filter(e=>e.tipo==='jogo').length;
+  const tr = events.filter(e=>e.tipo==='treino').length;
+  const to = events.filter(e=>e.tipo==='torneio').length + torneios.length;
+  const pl = players.length;
+
+  // Admin stats
+  const s1 = document.getElementById('statJogos');
+  const s2 = document.getElementById('statTorneios');
+  const s3 = document.getElementById('statTreinos');
+  const s4 = document.getElementById('statJogadores');
+  if (s1) s1.textContent = jg;
+  if (s2) s2.textContent = to;
+  if (s3) s3.textContent = tr;
+  if (s4) s4.textContent = pl;
+
+  // Public stats
+  const p1 = document.getElementById('pubStatJogos');
+  const p2 = document.getElementById('pubStatTorneios');
+  const p3 = document.getElementById('pubStatTreinos');
+  const p4 = document.getElementById('pubStatJogadores');
+  if (p1) p1.textContent = jg;
+  if (p2) p2.textContent = to;
+  if (p3) p3.textContent = tr;
+  if (p4) p4.textContent = pl;
 }
 
 // ─── RENDER ALL ───
 function renderAll() {
   renderPlayers();
   renderEvents();
+  renderPublicEvents();
   renderStats();
   renderMultiselect();
   renderTorneios();
 }
 
 // ─── INIT ───
+applyAdminState();
 renderAll();
-
-// Set default date to today
 document.getElementById('evData').value = new Date().toISOString().split('T')[0];
+
+// If admin session restored, show admin nav active on agenda
+if (isAdmin) {
+  // Leave default on agenda
+} else {
+  // default tab already set via HTML class
+}
 </script>
 </body>
 </html>
