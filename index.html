@@ -3,603 +3,502 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VolêiBros 🏐 — Agenda, Treinos & Torneios</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
+<title>VolêiBros 🏐 — Elite</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;600;700;900&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --sand: #f5e6c8;
-    --amber: #e8a020;
-    --court-blue: #1a3a5c;
-    --sky: #4a9edd;
-    --white: #ffffff;
-    --dark: #0d1f35;
-    --net-line: #e8c060;
-    --success: #27ae60;
-    --danger: #e74c3c;
-    --gray: #8a9bb0;
-    --light-bg: #f0f4f8;
-  }
+:root {
+  --bg:        #080808;
+  --bg2:       #0e0e0e;
+  --bg3:       #151515;
+  --bg4:       #1c1c1c;
+  --gold:      #C9A84C;
+  --gold-b:    #F0C040;
+  --gold-dim:  rgba(201,168,76,0.18);
+  --gold-glow: rgba(201,168,76,0.07);
+  --cream:     #F0E4C0;
+  --white:     #FFFFFF;
+  --gray:      #444444;
+  --gray-m:    #777777;
+  --gray-l:    #aaaaaa;
+  --success:   #27ae60;
+  --danger:    #c0392b;
+  --sky:       #3a7bd5;
+}
 
-  * { margin:0; padding:0; box-sizing:border-box; }
+*{margin:0;padding:0;box-sizing:border-box;}
 
-  body {
-    font-family: 'Montserrat', sans-serif;
-    background: var(--dark);
-    color: var(--white);
-    overflow-x: hidden;
-  }
+body{
+  font-family:'Montserrat',sans-serif;
+  background:var(--bg);
+  color:var(--white);
+  overflow-x:hidden;
+  min-height:100vh;
+}
 
-  /* ─── HEADER ─── */
-  header {
-    position: relative;
-    background: linear-gradient(135deg, var(--court-blue) 0%, var(--dark) 60%);
-    padding: 0;
-    overflow: hidden;
-    min-height: 90px;
-  }
-  header::before {
-    content:'';
-    position:absolute; inset:0;
-    background: repeating-linear-gradient(
-      0deg, transparent, transparent 48px,
-      rgba(232,192,96,0.15) 48px, rgba(232,192,96,0.15) 50px
-    ),
-    repeating-linear-gradient(
-      90deg, transparent, transparent 48px,
-      rgba(232,192,96,0.08) 48px, rgba(232,192,96,0.08) 50px
-    );
-  }
-  .header-inner {
-    position:relative; z-index:2;
-    display:flex; align-items:center; justify-content:space-between;
-    padding: 16px 32px;
-    flex-wrap: wrap; gap:12px;
-  }
-  .logo {
-    display:flex; align-items:center; gap:16px;
-  }
-  .logo-ball {
-    width:60px; height:60px;
-    background: radial-gradient(circle at 35% 35%, #fff 0%, var(--amber) 40%, #c06000 100%);
-    border-radius:50%;
-    box-shadow: 0 4px 20px rgba(232,160,32,0.5);
-    position:relative; flex-shrink:0;
-    animation: spin 8s linear infinite;
-  }
-  .logo-ball::after {
-    content:'';
-    position:absolute; inset:4px;
-    border-radius:50%;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: transparent;
-    border-left-color: transparent;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .logo-text h1 {
-    font-family:'Bebas Neue', sans-serif;
-    font-size:2.2rem; letter-spacing:3px;
-    color: var(--amber);
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-    line-height:1;
-  }
-  .logo-text p {
-    font-size:0.7rem; color: var(--sand); letter-spacing:2px;
-    text-transform:uppercase; opacity:0.8;
-  }
+/* ── TEXTURE OVERLAY ── */
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(-45deg,transparent 0,transparent 3px,rgba(201,168,76,0.018) 3px,rgba(201,168,76,0.018) 4px),
+    radial-gradient(ellipse 70% 50% at 90% 10%, rgba(201,168,76,0.04) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 60% at 10% 90%, rgba(201,168,76,0.03) 0%,transparent 60%);
+}
 
-  /* ─── NAV ─── */
-  nav {
-    display:flex; gap:6px; flex-wrap:wrap;
-  }
-  nav button {
-    background: transparent;
-    border: 1.5px solid rgba(232,192,96,0.4);
-    color: var(--sand);
-    font-family:'Montserrat',sans-serif;
-    font-size:0.72rem; font-weight:700;
-    padding:8px 14px; border-radius:6px;
-    cursor:pointer; text-transform:uppercase; letter-spacing:1px;
-    transition: all .2s;
-    white-space: nowrap;
-  }
-  nav button:hover, nav button.active {
-    background: var(--amber);
-    border-color: var(--amber);
-    color: var(--dark);
-  }
-  .btn-logout-nav {
-    background: rgba(231,76,60,0.2) !important;
-    border-color: var(--danger) !important;
-    color: #ff8a80 !important;
-  }
-  .btn-logout-nav:hover {
-    background: var(--danger) !important;
-    color: #fff !important;
-  }
-  .btn-admin-nav {
-    background: rgba(155,89,182,0.2) !important;
-    border-color: #9b59b6 !important;
-    color: #c39bd3 !important;
-  }
-  .btn-admin-nav:hover {
-    background: #9b59b6 !important;
-    color: #fff !important;
-  }
+/* ── HEADER ── */
+header{
+  position:relative;
+  background:linear-gradient(180deg,#0a0a0a 0%,#060606 100%);
+  border-bottom:1px solid var(--gold-dim);
+  overflow:hidden;
+  z-index:10;
+}
+header::after{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--gold-b),var(--gold),transparent);
+}
+.header-inner{
+  position:relative;z-index:2;
+  max-width:1400px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 32px;flex-wrap:wrap;gap:12px;
+}
+.logo{display:flex;align-items:center;gap:16px;}
+.logo-icon{
+  width:54px;height:54px;flex-shrink:0;
+  background:radial-gradient(circle at 35% 30%,#fff0 0%,var(--gold) 40%,#7a5000 100%);
+  border-radius:50%;
+  box-shadow:0 0 24px rgba(201,168,76,0.35),inset 0 0 8px rgba(255,255,255,0.1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.6rem;
+  animation:spin 10s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.logo-text h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;letter-spacing:4px;
+  background:linear-gradient(135deg,var(--gold-b),var(--gold),#8a6010);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.logo-text p{font-size:0.65rem;color:var(--cream);letter-spacing:3px;text-transform:uppercase;opacity:0.6;margin-top:3px;}
+.admin-badge{
+  display:none;
+  background:linear-gradient(135deg,#7d3c98,#5b2c6f);
+  color:#fff;font-size:0.6rem;font-weight:700;
+  padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;
+}
+body.is-admin .admin-badge{display:inline-block;}
 
-  /* Admin / Public nav visibility */
-  .nav-admin { display: none; }
-  body.is-admin .nav-admin { display: inline-flex; }
-  body.is-admin .nav-public-only { display: none !important; }
+/* ── NAV ── */
+nav{display:flex;gap:6px;flex-wrap:wrap;}
+nav button{
+  background:transparent;
+  border:1px solid rgba(201,168,76,0.25);
+  color:var(--cream);
+  font-family:'Montserrat',sans-serif;font-size:0.68rem;font-weight:700;
+  padding:8px 13px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:1px;
+  transition:all .2s;white-space:nowrap;
+}
+nav button:hover,nav button.active{
+  background:linear-gradient(135deg,var(--gold),#a07820);
+  border-color:var(--gold);color:#000;
+}
+.btn-logout-nav{background:rgba(192,57,43,0.15)!important;border-color:var(--danger)!important;color:#ff8a80!important;}
+.btn-logout-nav:hover{background:var(--danger)!important;color:#fff!important;}
+.btn-admin-nav{background:rgba(125,60,152,0.15)!important;border-color:#7d3c98!important;color:#c39bd3!important;}
+.btn-admin-nav:hover{background:#7d3c98!important;color:#fff!important;}
 
-  /* Admin badge */
-  .admin-badge {
-    display: none;
-    background: linear-gradient(135deg, #9b59b6, #6c3483);
-    color: #fff;
-    font-size: 0.65rem;
-    font-weight: 700;
-    padding: 3px 10px;
-    border-radius: 20px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    align-items: center;
-    gap: 5px;
-  }
-  body.is-admin .admin-badge { display: flex; }
+.nav-admin{display:none;}
+body.is-admin .nav-admin{display:inline-block;}
+body.is-admin .nav-public-only{display:none!important;}
 
-  /* ─── NET DIVIDER ─── */
-  .net-divider {
-    height:18px;
-    background: repeating-linear-gradient(
-      90deg,
-      var(--net-line) 0px, var(--net-line) 3px,
-      transparent 3px, transparent 24px
-    );
-    opacity:0.6;
-  }
+/* ── NET DIVIDER ── */
+.net-divider{
+  height:6px;
+  background:linear-gradient(90deg,transparent 0%,var(--gold) 20%,var(--gold-b) 50%,var(--gold) 80%,transparent 100%);
+  opacity:0.5;
+  position:relative;z-index:10;
+}
 
-  /* ─── MAIN LAYOUT ─── */
-  main { max-width:1400px; margin:0 auto; padding:24px 20px; }
+/* ── MAIN ── */
+main{max-width:1400px;margin:0 auto;padding:28px 20px;position:relative;z-index:1;}
 
-  /* ─── TABS ─── */
-  .tab { display:none; }
-  .tab.active { display:block; }
+/* ── TABS ── */
+.tab{display:none;}
+.tab.active{display:block;}
 
-  /* ─── SECTION TITLE ─── */
-  .section-title {
-    font-family:'Bebas Neue',sans-serif;
-    font-size:2rem; letter-spacing:3px;
-    color: var(--amber);
-    border-left: 4px solid var(--amber);
-    padding-left:16px; margin-bottom:24px;
-    display:flex; align-items:center; gap:12px;
-  }
+/* ── SECTION TITLE ── */
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.9rem;letter-spacing:4px;
+  color:var(--gold);
+  border-left:3px solid var(--gold);
+  padding-left:16px;margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+  text-shadow:0 0 30px rgba(201,168,76,0.2);
+}
 
-  /* ─── CARDS ─── */
-  .card {
-    background: linear-gradient(135deg, var(--court-blue), rgba(26,58,92,0.6));
-    border: 1px solid rgba(232,192,96,0.2);
-    border-radius:16px; padding:24px;
-    margin-bottom:20px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  }
-  .card-title {
-    font-family:'Oswald',sans-serif;
-    font-size:1.1rem; color: var(--amber);
-    text-transform:uppercase; letter-spacing:2px;
-    margin-bottom:16px;
-    display:flex; align-items:center; gap:8px;
-  }
+/* ── CARDS ── */
+.card{
+  background:var(--bg3);
+  border:1px solid var(--gold-dim);
+  border-radius:14px;padding:24px;margin-bottom:20px;
+  box-shadow:0 4px 32px rgba(0,0,0,0.5),inset 0 0 0 0 transparent;
+  transition:box-shadow .3s;
+}
+.card:hover{box-shadow:0 4px 32px rgba(0,0,0,0.6),0 0 0 1px var(--gold-dim);}
+.card-title{
+  font-family:'Oswald',sans-serif;font-size:1rem;
+  color:var(--gold);text-transform:uppercase;letter-spacing:2px;
+  margin-bottom:16px;display:flex;align-items:center;gap:8px;
+}
 
-  /* ─── FORMS ─── */
-  .form-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px; }
-  .form-group { display:flex; flex-direction:column; gap:6px; }
-  label { font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--sand); font-weight:600; }
-  input, select, textarea {
-    background: rgba(255,255,255,0.07);
-    border: 1.5px solid rgba(232,192,96,0.3);
-    border-radius:8px; padding:10px 14px;
-    color: var(--white); font-family:'Montserrat',sans-serif; font-size:0.9rem;
-    transition: border-color .2s;
-  }
-  input:focus, select:focus, textarea:focus {
-    outline:none; border-color: var(--amber);
-    background: rgba(255,255,255,0.1);
-  }
-  select option { background: var(--dark); }
-  textarea { resize:vertical; min-height:80px; }
+/* ── FORMS ── */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+label{font-size:0.72rem;text-transform:uppercase;letter-spacing:1px;color:var(--cream);font-weight:700;opacity:0.7;}
+input,select,textarea{
+  background:var(--bg2);
+  border:1px solid rgba(201,168,76,0.25);
+  border-radius:8px;padding:10px 14px;
+  color:var(--white);font-family:'Montserrat',sans-serif;font-size:0.88rem;
+  transition:border-color .2s;
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);}
+select option{background:var(--bg3);}
+textarea{resize:vertical;min-height:80px;}
+input[type=file]{padding:8px 10px;cursor:pointer;font-size:0.8rem;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+.btn{
+  padding:11px 22px;border-radius:9px;
+  font-family:'Montserrat',sans-serif;font-size:0.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:1.5px;
+  cursor:pointer;border:none;transition:all .2s;
+}
+.btn-primary{background:linear-gradient(135deg,var(--gold-b),var(--gold));color:#000;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(201,168,76,0.4);}
+.btn-success{background:var(--success);color:#fff;}
+.btn-success:hover{background:#2ecc71;}
+.btn-danger{background:var(--danger);color:#fff;font-size:0.75rem;padding:7px 14px;}
+.btn-danger:hover{background:#e74c3c;}
+.btn-whatsapp{background:#25D366;color:#fff;}
+.btn-whatsapp:hover{background:#1ebe59;}
+.btn-google{background:#4285F4;color:#fff;}
+.btn-sm{padding:7px 14px;font-size:0.75rem;}
+.btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold);}
+.btn-outline:hover{background:var(--gold-dim);}
 
-  .btn {
-    padding:12px 24px; border-radius:10px;
-    font-family:'Montserrat',sans-serif; font-size:0.85rem; font-weight:700;
-    text-transform:uppercase; letter-spacing:1.5px;
-    cursor:pointer; border:none; transition: all .2s;
-  }
-  .btn-primary { background: var(--amber); color: var(--dark); }
-  .btn-primary:hover { background: #f5b030; transform:translateY(-2px); box-shadow:0 6px 20px rgba(232,160,32,0.4); }
-  .btn-success { background: var(--success); color:#fff; }
-  .btn-success:hover { background:#2ecc71; }
-  .btn-danger { background: var(--danger); color:#fff; font-size:0.75rem; padding:6px 12px; }
-  .btn-whatsapp { background: #25D366; color:#fff; }
-  .btn-whatsapp:hover { background:#1ebe59; }
-  .btn-google { background: #4285F4; color:#fff; }
-  .btn-google:hover { background:#2c6de8; }
-  .btn-sm { padding:6px 14px; font-size:0.75rem; }
-  .btn-purple { background: #9b59b6; color:#fff; }
-  .btn-purple:hover { background: #8e44ad; }
+/* ── BADGES ── */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.badge-jogo{background:var(--sky);color:#fff;}
+.badge-torneio{background:#7d3c98;color:#fff;}
+.badge-treino{background:var(--success);color:#fff;}
 
-  .btn-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:18px; }
+/* ── STATS ── */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;margin-bottom:28px;}
+.stat-box{
+  background:var(--bg3);border:1px solid var(--gold-dim);
+  border-radius:12px;padding:18px;text-align:center;
+  background:linear-gradient(135deg,var(--bg3),var(--bg2));
+}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--gold);line-height:1;}
+.stat-label{font-size:0.68rem;color:var(--gray-m);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
 
-  /* ─── BADGES ─── */
-  .badge {
-    display:inline-block; padding:3px 10px; border-radius:20px;
-    font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:1px;
-  }
-  .badge-jogo { background: var(--sky); color:#fff; }
-  .badge-torneio { background: #9b59b6; color:#fff; }
-  .badge-treino { background: var(--success); color:#fff; }
+/* ── EVENTS ── */
+.event-list{display:flex;flex-direction:column;gap:12px;}
+.event-item{
+  background:var(--bg3);border:1px solid var(--gold-dim);
+  border-radius:12px;padding:16px;
+  display:flex;gap:16px;align-items:flex-start;
+  transition:all .2s;cursor:pointer;
+}
+.event-item:hover{background:var(--bg4);border-color:rgba(201,168,76,0.4);}
+.event-upcoming{border-left:3px solid var(--gold);}
+.event-past{opacity:0.45;}
+.event-date-box{
+  background:linear-gradient(135deg,var(--gold),#8a6010);
+  color:#000;border-radius:10px;padding:8px 12px;
+  text-align:center;min-width:56px;flex-shrink:0;
+}
+.event-date-box .day{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;line-height:1;}
+.event-date-box .month{font-size:0.62rem;font-weight:700;text-transform:uppercase;}
+.event-info{flex:1;min-width:0;}
+.event-info h3{font-family:'Oswald',sans-serif;font-size:1rem;margin-bottom:4px;}
+.event-info p{font-size:0.8rem;color:var(--gray-m);margin-bottom:6px;}
+.event-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
 
-  /* ─── AGENDA / EVENTS LIST ─── */
-  .event-list { display:flex; flex-direction:column; gap:12px; }
-  .event-item {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(232,192,96,0.15);
-    border-radius:12px; padding:16px;
-    display:flex; gap:16px; align-items:flex-start;
-    transition: all .2s;
-    cursor: pointer;
-  }
-  .event-item:hover { background:rgba(232,160,32,0.08); border-color:rgba(232,192,96,0.4); }
-  .event-date-box {
-    background: var(--amber);
-    color: var(--dark);
-    border-radius:10px; padding:8px 12px;
-    text-align:center; min-width:56px; flex-shrink:0;
-  }
-  .event-date-box .day { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; line-height:1; }
-  .event-date-box .month { font-size:0.65rem; font-weight:700; text-transform:uppercase; }
-  .event-info { flex:1; min-width:0; }
-  .event-info h3 { font-family:'Oswald',sans-serif; font-size:1rem; margin-bottom:4px; }
-  .event-info p { font-size:0.8rem; color:var(--gray); margin-bottom:6px; }
-  .event-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+/* ── PLAYERS / ATLETAS ── */
+.players-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
+.player-card{
+  background:var(--bg3);border:1px solid var(--gold-dim);
+  border-radius:14px;padding:20px;text-align:center;
+  transition:all .25s;cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.player-card::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,var(--gold-glow) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.player-card:hover::before{opacity:1;}
+.player-card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,0.5);box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.player-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),#5a4000);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#000;
+  margin:0 auto 12px;
+  border:2px solid var(--gold-dim);
+  box-shadow:0 4px 16px rgba(0,0,0,0.4);
+  overflow:hidden;
+}
+.player-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.player-num{
+  position:absolute;top:12px;right:14px;
+  font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  color:var(--gold);opacity:0.5;line-height:1;
+}
+.player-card h4{font-size:0.9rem;font-weight:700;margin-bottom:3px;color:var(--white);}
+.player-card .apelido{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gold);letter-spacing:2px;margin-bottom:4px;}
+.player-card p{font-size:0.75rem;color:var(--gray-m);}
+.player-card .bio{font-size:0.73rem;color:var(--gray-l);margin-top:6px;font-style:italic;line-height:1.4;}
+.player-card .whatsapp{color:#25D366;font-size:0.73rem;margin-top:6px;}
 
-  /* ─── EVENT PAST ─── */
-  .event-past { opacity: 0.5; }
-  .event-upcoming { border-left: 3px solid var(--amber); }
+/* ── CONQUISTAS ── */
+.conquistas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;}
+.conquista-card{
+  background:var(--bg3);border:1px solid var(--gold-dim);
+  border-radius:16px;overflow:hidden;
+  transition:all .25s;
+  position:relative;
+}
+.conquista-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.6),0 0 0 1px rgba(201,168,76,0.4);}
+.conquista-photo{
+  width:100%;height:160px;object-fit:cover;display:block;
+  background:linear-gradient(135deg,var(--bg4),var(--bg2));
+}
+.conquista-photo-placeholder{
+  width:100%;height:140px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.5rem;
+  background:linear-gradient(135deg,var(--bg4),rgba(201,168,76,0.05));
+}
+.conquista-body{padding:20px;}
+.conquista-tipo{
+  font-size:0.68rem;text-transform:uppercase;letter-spacing:2px;
+  color:var(--gold);font-weight:700;margin-bottom:8px;
+}
+.conquista-body h3{
+  font-family:'Bebas Neue',sans-serif;font-size:1.4rem;
+  letter-spacing:2px;color:var(--white);margin-bottom:6px;
+  line-height:1.1;
+}
+.conquista-body p{font-size:0.8rem;color:var(--gray-l);line-height:1.5;margin-bottom:10px;}
+.conquista-data{font-size:0.72rem;color:var(--gray-m);}
 
-  /* ─── PLAYERS ─── */
-  .players-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:14px; }
-  .player-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(232,192,96,0.2);
-    border-radius:12px; padding:16px; text-align:center;
-    transition: all .2s; cursor:pointer;
-  }
-  .player-card:hover { background:rgba(232,160,32,0.1); transform:translateY(-3px); }
-  .player-avatar {
-    width:56px; height:56px; border-radius:50%;
-    background: linear-gradient(135deg, var(--amber), var(--sky));
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Bebas Neue',sans-serif; font-size:1.6rem;
-    margin:0 auto 10px; box-shadow:0 4px 14px rgba(232,160,32,0.3);
-  }
-  .player-card h4 { font-size:0.9rem; margin-bottom:4px; }
-  .player-card p { font-size:0.75rem; color:var(--gray); }
-  .player-card .whatsapp { color:#25D366; font-size:0.75rem; margin-top:6px; }
+/* medal colours */
+.tipo-ouro .conquista-tipo{color:#FFD060;}
+.tipo-ouro{border-color:rgba(255,208,96,0.3);}
+.tipo-prata .conquista-tipo{color:#C0C0C0;}
+.tipo-prata{border-color:rgba(192,192,192,0.25);}
+.tipo-bronze .conquista-tipo{color:#CD7F32;}
+.tipo-bronze{border-color:rgba(205,127,50,0.3);}
 
-  /* ─── TRAINING ─── */
-  .training-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap:18px; }
-  .training-card {
-    background: linear-gradient(135deg, rgba(26,58,92,0.9), rgba(13,31,53,0.9));
-    border: 1px solid rgba(74,158,221,0.3);
-    border-radius:16px; overflow:hidden;
-  }
-  .training-header {
-    padding:18px 20px;
-    background: linear-gradient(90deg, var(--court-blue), rgba(74,158,221,0.3));
-    border-bottom:1px solid rgba(74,158,221,0.2);
-    display:flex; align-items:center; gap:12px;
-  }
-  .training-icon { font-size:2rem; }
-  .training-header h3 { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:2px; color:var(--amber); }
-  .training-header p { font-size:0.75rem; color:var(--gray); }
-  .training-body { padding:18px 20px; }
-  .drill {
-    margin-bottom:14px;
-    border-left:3px solid var(--sky);
-    padding-left:12px;
-  }
-  .drill h4 { font-size:0.85rem; font-weight:700; color:var(--sand); margin-bottom:4px; }
-  .drill p { font-size:0.8rem; color:var(--gray); line-height:1.5; }
-  .drill .drill-meta { font-size:0.72rem; color:var(--amber); margin-top:4px; font-weight:600; }
+/* ── QUEM SOMOS ── */
+.hero-team{
+  border-radius:18px;overflow:hidden;margin-bottom:28px;
+  position:relative;min-height:220px;
+  background:var(--bg3);border:1px solid var(--gold-dim);
+}
+.hero-photo{width:100%;max-height:380px;object-fit:cover;display:block;}
+.hero-placeholder{
+  min-height:200px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--bg3),var(--bg4));
+  flex-direction:column;gap:12px;
+}
+.hero-overlay{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:24px 28px;
+  background:linear-gradient(0deg,rgba(8,8,8,0.95) 0%,transparent 100%);
+}
+.hero-overlay h2{
+  font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:4px;
+  color:var(--white);line-height:1;
+  text-shadow:2px 2px 12px rgba(0,0,0,0.8);
+}
+.hero-overlay p{font-size:0.82rem;color:var(--cream);opacity:0.8;margin-top:6px;}
 
-  /* ─── RULES ─── */
-  .rules-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:18px; }
-  .rule-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(232,192,96,0.15);
-    border-radius:14px; padding:20px;
-  }
-  .rule-card h3 { font-family:'Oswald',sans-serif; font-size:1rem; color:var(--amber); margin-bottom:12px; display:flex; gap:8px; align-items:center; }
-  .rule-card ul { list-style:none; }
-  .rule-card ul li {
-    padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.06);
-    font-size:0.82rem; color:var(--sand); line-height:1.4;
-    padding-left:16px; position:relative;
-  }
-  .rule-card ul li::before { content:'▸'; position:absolute; left:0; color:var(--amber); }
+/* ── TRAINING ── */
+.training-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px;}
+.training-card{background:var(--bg3);border:1px solid rgba(201,168,76,0.12);border-radius:16px;overflow:hidden;}
+.training-header{padding:18px 20px;background:linear-gradient(90deg,rgba(201,168,76,0.1),var(--bg2));border-bottom:1px solid var(--gold-dim);display:flex;align-items:center;gap:12px;}
+.training-icon{font-size:2rem;}
+.training-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--gold);}
+.training-header p{font-size:0.72rem;color:var(--gray-m);}
+.training-body{padding:18px 20px;}
+.drill{margin-bottom:14px;border-left:3px solid var(--gold-dim);padding-left:12px;}
+.drill h4{font-size:0.82rem;font-weight:700;color:var(--cream);margin-bottom:4px;}
+.drill p{font-size:0.78rem;color:var(--gray-m);line-height:1.5;}
+.drill-meta{font-size:0.7rem;color:var(--gold);margin-top:4px;font-weight:600;}
 
-  /* ─── TOAST ─── */
-  #toast {
-    position:fixed; bottom:24px; right:24px; z-index:9999;
-    background: var(--success); color:#fff;
-    padding:14px 22px; border-radius:12px;
-    font-weight:700; font-size:0.9rem;
-    box-shadow:0 8px 24px rgba(0,0,0,0.4);
-    transform: translateY(100px); opacity:0;
-    transition: all .3s;
-    display:flex; align-items:center; gap:10px;
-    max-width: calc(100vw - 48px);
-  }
-  #toast.show { transform:translateY(0); opacity:1; }
+/* ── RULES ── */
+.rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;}
+.rule-card{background:var(--bg3);border:1px solid var(--gold-dim);border-radius:14px;padding:20px;}
+.rule-card h3{font-family:'Oswald',sans-serif;font-size:0.95rem;color:var(--gold);margin-bottom:12px;display:flex;gap:8px;align-items:center;}
+.rule-card ul{list-style:none;}
+.rule-card ul li{padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.8rem;color:var(--cream);line-height:1.4;padding-left:16px;position:relative;}
+.rule-card ul li::before{content:'▸';position:absolute;left:0;color:var(--gold);}
 
-  /* ─── SCHEDULE WEEKLY ─── */
-  .weekly-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:8px; margin-bottom:24px; }
-  .day-col { background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 8px; text-align:center; min-height:80px; }
-  .day-col.has-event { background:rgba(232,160,32,0.1); border:1px solid rgba(232,192,96,0.3); }
-  .day-col h4 { font-size:0.7rem; text-transform:uppercase; color:var(--gray); letter-spacing:1px; margin-bottom:8px; }
-  .day-event-dot { width:8px; height:8px; border-radius:50%; background:var(--amber); margin:0 auto 4px; }
-  .day-event-label { font-size:0.65rem; color:var(--sand); }
+/* ── WEEKLY GRADE ── */
+.grade-3col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.grade-day{
+  background:rgba(39,174,96,0.08);border:1px solid rgba(39,174,96,0.3);
+  border-radius:12px;padding:16px;text-align:center;
+}
+.grade-day-name{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:#2ecc71;}
+.grade-day-time{font-size:0.78rem;color:var(--cream);margin-top:6px;}
+.grade-day-loc{font-size:0.72rem;color:var(--gray-m);margin-top:4px;}
 
-  /* ─── MODAL ─── */
-  .modal-overlay {
-    display:none; position:fixed; inset:0;
-    background:rgba(0,0,0,0.7); z-index:999;
-    align-items:center; justify-content:center;
-    backdrop-filter:blur(4px);
-    padding: 16px;
-  }
-  .modal-overlay.open { display:flex; }
-  .modal {
-    background: linear-gradient(135deg, var(--court-blue), var(--dark));
-    border:1px solid rgba(232,192,96,0.3);
-    border-radius:20px; padding:32px; max-width:560px; width:100%;
-    max-height:90vh; overflow-y:auto;
-    box-shadow:0 24px 80px rgba(0,0,0,0.5);
-  }
-  .modal h2 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; color:var(--amber); margin-bottom:24px; }
-  .modal-close { float:right; background:none; border:none; color:var(--gray); font-size:1.4rem; cursor:pointer; }
+/* ── BRACKET ── */
+.bracket-container{overflow-x:auto;}
+.bracket{display:flex;gap:32px;padding:16px 0;min-width:600px;}
+.bracket-round{display:flex;flex-direction:column;gap:16px;justify-content:center;}
+.bracket-title{font-family:'Bebas Neue',sans-serif;font-size:0.9rem;color:var(--gold);letter-spacing:2px;text-align:center;margin-bottom:8px;}
+.bracket-match{background:rgba(255,255,255,0.04);border:1px solid var(--gold-dim);border-radius:10px;padding:10px 14px;min-width:160px;}
+.bracket-team{font-size:0.8rem;padding:4px 0;color:var(--cream);display:flex;justify-content:space-between;}
+.bracket-team.winner{color:var(--gold);font-weight:700;}
+.bracket-team .score{color:var(--gold);font-weight:700;}
 
-  /* Admin Login Modal */
-  .login-modal {
-    max-width: 400px;
-  }
-  .login-modal .lock-icon {
-    text-align: center;
-    font-size: 3rem;
-    margin-bottom: 16px;
-  }
-  .login-modal .login-hint {
-    font-size: 0.75rem;
-    color: var(--gray);
-    text-align: center;
-    margin-top: 12px;
-  }
+/* ── PLANO SEMANAL ── */
+.plano-linha{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:start;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.plano-linha:last-child{border-bottom:none;}
 
-  /* ─── STATS ─── */
-  .stats-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:24px; }
-  .stat-box {
-    background: linear-gradient(135deg, rgba(232,160,32,0.15), rgba(74,158,221,0.1));
-    border:1px solid rgba(232,192,96,0.2);
-    border-radius:14px; padding:18px; text-align:center;
-  }
-  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:var(--amber); line-height:1; }
-  .stat-label { font-size:0.7rem; color:var(--gray); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:16px;}
+.modal-overlay.open{display:flex;}
+.modal{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--gold-dim);border-radius:20px;padding:32px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.7);}
+.modal h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);margin-bottom:24px;letter-spacing:3px;}
+.modal-close{float:right;background:none;border:none;color:var(--gray-m);font-size:1.4rem;cursor:pointer;}
+.login-modal{max-width:400px;}
+.lock-icon{text-align:center;font-size:3rem;margin-bottom:16px;}
+.login-hint{font-size:0.72rem;color:var(--gray-m);text-align:center;margin-top:12px;}
+.pass-container{position:relative;}
+.pass-container input{width:100%;padding-right:44px;}
+.pass-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--gray-m);font-size:1rem;}
 
-  /* ─── BRACKET ─── */
-  .bracket-container { overflow-x:auto; }
-  .bracket { display:flex; gap:32px; padding:16px 0; min-width:600px; }
-  .bracket-round { display:flex; flex-direction:column; gap:16px; justify-content:center; }
-  .bracket-title { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; color:var(--amber); letter-spacing:2px; text-align:center; margin-bottom:8px; }
-  .bracket-match {
-    background: rgba(255,255,255,0.05);
-    border:1px solid rgba(232,192,96,0.2);
-    border-radius:10px; padding:10px 14px; min-width:160px;
-  }
-  .bracket-team { font-size:0.8rem; padding:4px 0; color:var(--sand); display:flex; justify-content:space-between; }
-  .bracket-team.winner { color:var(--amber); font-weight:700; }
-  .bracket-team .score { color:var(--amber); font-weight:700; }
+/* ── TOAST ── */
+#toast{
+  position:fixed;bottom:24px;right:24px;z-index:9999;
+  background:var(--success);color:#fff;
+  padding:14px 22px;border-radius:12px;
+  font-weight:700;font-size:0.88rem;
+  box-shadow:0 8px 24px rgba(0,0,0,0.5);
+  transform:translateY(100px);opacity:0;transition:all .3s;
+  display:flex;align-items:center;gap:10px;max-width:calc(100vw - 48px);
+}
+#toast.show{transform:translateY(0);opacity:1;}
 
-  /* ─── PUBLIC EVENTS BANNER ─── */
-  .next-event-banner {
-    background: linear-gradient(135deg, rgba(232,160,32,0.2), rgba(74,158,221,0.1));
-    border: 2px solid rgba(232,192,96,0.4);
-    border-radius: 16px;
-    padding: 20px 24px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .next-event-banner .banner-label {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--amber);
-    font-weight: 700;
-    margin-bottom: 4px;
-  }
-  .next-event-banner h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    letter-spacing: 2px;
-  }
-  .next-event-banner .banner-icon {
-    font-size: 2.5rem;
-    flex-shrink: 0;
-  }
+/* ── MULTISELECT ── */
+.multiselect-container{position:relative;}
+.multiselect-dropdown{display:none;position:absolute;top:100%;left:0;right:0;z-index:100;background:var(--bg2);border:1px solid var(--gold);border-radius:8px;max-height:180px;overflow-y:auto;padding:8px 0;}
+.multiselect-container.open .multiselect-dropdown{display:block;}
+.multiselect-option{padding:8px 14px;font-size:0.85rem;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.15s;}
+.multiselect-option:hover{background:var(--gold-glow);}
+.multiselect-option input[type=checkbox]{accent-color:var(--gold);}
+.selected-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.tag{background:var(--gold-dim);border:1px solid var(--gold);border-radius:20px;padding:3px 10px;font-size:0.72rem;color:var(--gold);display:flex;align-items:center;gap:6px;cursor:pointer;}
 
-  /* ─── RESPONSIVE ─── */
-  @media(max-width:768px) {
-    .header-inner {
-      padding:12px 16px;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    nav {
-      width: 100%;
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      padding-bottom: 4px;
-      -webkit-overflow-scrolling: touch;
-    }
-    nav::-webkit-scrollbar { height: 3px; }
-    nav::-webkit-scrollbar-thumb { background: rgba(232,192,96,0.4); border-radius:3px; }
-    .logo-text h1 { font-size:1.6rem; }
-    nav button { font-size:0.65rem; padding:7px 10px; }
-    .weekly-grid { grid-template-columns:repeat(3,1fr); }
-    .section-title { font-size:1.4rem; }
-    .card { padding: 16px; }
-    .form-grid { grid-template-columns: 1fr; }
-    main { padding: 16px 12px; }
-    .event-item { flex-direction: column; }
-    .event-date-box { width: 100%; display: flex; gap: 8px; align-items: center; border-radius: 8px; padding: 8px 14px; }
-    .event-date-box .day { font-size: 1.4rem; }
-    .event-date-box .month { font-size: 0.7rem; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    .players-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
-    .training-grid { grid-template-columns: 1fr; }
-    .rules-grid { grid-template-columns: 1fr; }
-    .modal { padding: 20px 16px; }
-    .modal h2 { font-size: 1.4rem; }
-    .next-event-banner { flex-direction: column; gap: 12px; }
-  }
+/* ── TORNEIO CARD ── */
+.torneio-card{
+  background:var(--bg3);border:1px solid var(--gold-dim);border-radius:14px;
+  padding:20px;display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;margin-bottom:14px;
+}
 
-  @media(max-width:480px) {
-    .logo-ball { width: 44px; height: 44px; }
-    .logo-text h1 { font-size: 1.3rem; }
-    .logo-text p { font-size: 0.6rem; }
-    .section-title { font-size: 1.2rem; letter-spacing: 2px; }
-    .stat-num { font-size: 1.8rem; }
-    .weekly-grid { grid-template-columns: repeat(3,1fr); }
-    .btn { padding: 10px 16px; font-size: 0.8rem; }
-    .training-grid { grid-template-columns: 1fr; }
-  }
+/* ── CONFIG UPLOAD ── */
+.photo-preview{
+  width:120px;height:120px;border-radius:50%;
+  border:2px solid var(--gold-dim);
+  object-fit:cover;display:block;margin-bottom:10px;
+  background:var(--bg4);
+}
+.photo-preview-rect{
+  width:100%;max-height:200px;border-radius:12px;
+  border:1px solid var(--gold-dim);object-fit:cover;display:block;margin-bottom:10px;
+  background:var(--bg4);
+}
 
-  /* Decorative volleyball net in background */
-  .page-bg {
-    position:fixed; inset:0; z-index:-1; pointer-events:none;
-    background:
-      radial-gradient(ellipse at 80% 20%, rgba(74,158,221,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse at 10% 80%, rgba(232,160,32,0.05) 0%, transparent 50%),
-      var(--dark);
-  }
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:4px;}
 
-  .floating-ball {
-    position:fixed; pointer-events:none; z-index:-1; opacity:0.04;
-    border-radius:50%;
-  }
-  .fb1 { width:300px; height:300px; top:10%; right:-80px; background:radial-gradient(circle, var(--amber), transparent); animation: float1 12s ease-in-out infinite; }
-  .fb2 { width:200px; height:200px; bottom:15%; left:-60px; background:radial-gradient(circle, var(--sky), transparent); animation: float2 15s ease-in-out infinite; }
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .header-inner{padding:12px 16px;flex-direction:column;align-items:flex-start;}
+  nav{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+  nav::-webkit-scrollbar{height:3px;}
+  nav::-webkit-scrollbar-thumb{background:var(--gold-dim);}
+  .logo-text h1{font-size:1.5rem;}
+  .grade-3col{grid-template-columns:1fr;}
+  .event-item{flex-direction:column;}
+  .event-date-box{width:100%;display:flex;gap:8px;align-items:center;border-radius:8px;padding:8px 14px;}
+  .event-date-box .day{font-size:1.4rem;}
+  .stats-row{grid-template-columns:repeat(2,1fr);}
+  .players-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));}
+  .training-grid,.rules-grid{grid-template-columns:1fr;}
+  .conquistas-grid{grid-template-columns:1fr;}
+  .modal{padding:20px 16px;}
+  main{padding:16px 12px;}
+  .plano-linha{grid-template-columns:1fr;gap:4px;}
+}
+@media(max-width:480px){
+  .logo-text h1{font-size:1.2rem;}
+  .form-grid{grid-template-columns:1fr;}
+  nav button{font-size:0.62rem;padding:7px 10px;}
+}
 
-  @keyframes float1 { 0%,100%{transform:translateY(0);} 50%{transform:translateY(30px);} }
-  @keyframes float2 { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-24px);} }
-
-  /* Scroll */
-  ::-webkit-scrollbar { width:6px; }
-  ::-webkit-scrollbar-track { background:rgba(255,255,255,0.05); }
-  ::-webkit-scrollbar-thumb { background:var(--amber); border-radius:4px; }
-
-  .multiselect-container { position:relative; }
-  .multiselect-dropdown {
-    display:none;
-    position:absolute; top:100%; left:0; right:0; z-index:100;
-    background:var(--dark);
-    border:1.5px solid var(--amber);
-    border-radius:8px; max-height:180px; overflow-y:auto;
-    padding:8px 0;
-  }
-  .multiselect-container.open .multiselect-dropdown { display:block; }
-  .multiselect-option {
-    padding:8px 14px; font-size:0.85rem; cursor:pointer;
-    display:flex; align-items:center; gap:8px;
-    transition:.15s;
-  }
-  .multiselect-option:hover { background:rgba(232,160,32,0.1); }
-  .multiselect-option input[type=checkbox] { accent-color:var(--amber); }
-  .selected-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-  .tag {
-    background:rgba(232,160,32,0.2); border:1px solid var(--amber);
-    border-radius:20px; padding:3px 10px; font-size:0.75rem; color:var(--amber);
-    display:flex; align-items:center; gap:6px; cursor:pointer;
-  }
-  .tag span { font-size:1rem; line-height:1; }
-
-  /* ─── TREINOS GRADE SEMANAL 3 colunas mobile ─── */
-  .grade-3col {
-    display:grid;
-    grid-template-columns: repeat(3,1fr);
-    gap:14px;
-  }
-  @media(max-width:480px){
-    .grade-3col { grid-template-columns: 1fr; }
-  }
-
-  /* ─── PLANO SEMANAL ─── */
-  .plano-linha {
-    display:grid;
-    grid-template-columns:120px 1fr;
-    gap:16px;
-    align-items:start;
-    padding:12px 0;
-    border-bottom:1px solid rgba(255,255,255,0.06);
-  }
-  @media(max-width:480px){
-    .plano-linha { grid-template-columns: 1fr; gap: 4px; }
-  }
-  .plano-linha:last-child { border-bottom: none; }
-
-  /* ─── SENHA INPUT ─── */
-  .pass-container { position: relative; }
-  .pass-container input { width: 100%; padding-right: 44px; }
-  .pass-toggle {
-    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-    background: none; border: none; cursor: pointer;
-    color: var(--gray); font-size: 1rem;
-  }
-
+/* ── FLOATING GOLD ORBS ── */
+.orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;opacity:0.04;}
+.orb1{width:400px;height:400px;right:-120px;top:5%;background:radial-gradient(circle,var(--gold),transparent);animation:flt 14s ease-in-out infinite;}
+.orb2{width:250px;height:250px;left:-80px;bottom:10%;background:radial-gradient(circle,var(--gold),transparent);animation:flt 18s ease-in-out infinite reverse;}
+@keyframes flt{0%,100%{transform:translateY(0);}50%{transform:translateY(40px);}}
 </style>
 </head>
 <body>
-<div class="page-bg"></div>
-<div class="floating-ball fb1"></div>
-<div class="floating-ball fb2"></div>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
 
 <header>
   <div class="header-inner">
     <div class="logo">
-      <div class="logo-ball"></div>
+      <div class="logo-icon">🏐</div>
       <div class="logo-text">
-        <h1>🏐 VolêiBros</h1>
-        <p id="subtitleText">Treinos · Regras · Próximos Eventos</p>
+        <h1>VolêiBros</h1>
+        <p id="subtitleText">Time de Elite · Camocim, CE</p>
       </div>
       <div class="admin-badge">👑 Admin</div>
     </div>
     <nav id="mainNav">
-      <!-- PUBLIC NAV -->
-      <button class="nav-public-only active" onclick="showTab('eventos', this)">📅 Próximos Eventos</button>
-      <button class="nav-public-only" onclick="showTab('treinos', this)">💪 Treinos</button>
-      <button class="nav-public-only" onclick="showTab('regras', this)">📖 Regras</button>
+      <!-- PUBLIC -->
+      <button class="nav-public-only active" onclick="showTab('quem-somos',this)">🤝 Quem Somos</button>
+      <button class="nav-public-only" onclick="showTab('eventos',this)">📅 Eventos</button>
+      <button class="nav-public-only" onclick="showTab('conquistas',this)">🏆 Conquistas</button>
+      <button class="nav-public-only" onclick="showTab('treinos',this)">💪 Treinos</button>
+      <button class="nav-public-only" onclick="showTab('regras',this)">📖 Regras</button>
       <button class="nav-public-only btn-admin-nav" onclick="openAdminLogin()">🔐 Admin</button>
-
-      <!-- ADMIN NAV -->
-      <button class="nav-admin" onclick="showTab('agenda', this)">📅 Agenda</button>
-      <button class="nav-admin" onclick="showTab('jogadores', this)">👥 Jogadores</button>
-      <button class="nav-admin" onclick="showTab('torneios', this)">🏆 Torneios</button>
-      <button class="nav-admin" onclick="showTab('treinos', this)">💪 Treinos</button>
-      <button class="nav-admin" onclick="showTab('regras', this)">📖 Regras</button>
+      <!-- ADMIN -->
+      <button class="nav-admin" onclick="showTab('agenda',this)">📅 Agenda</button>
+      <button class="nav-admin" onclick="showTab('atletas',this)">👥 Atletas</button>
+      <button class="nav-admin" onclick="showTab('admin-conquistas',this)">🏆 Conquistas</button>
+      <button class="nav-admin" onclick="showTab('torneios',this)">🏐 Torneios</button>
+      <button class="nav-admin" onclick="showTab('config',this)">⚙️ Config</button>
+      <button class="nav-admin" onclick="showTab('treinos',this)">💪 Treinos</button>
+      <button class="nav-admin" onclick="showTab('regras',this)">📖 Regras</button>
       <button class="nav-admin btn-logout-nav" onclick="logout()">🔒 Sair</button>
     </nav>
   </div>
@@ -608,656 +507,315 @@
 
 <main>
 
-<!-- ═══════════════════ PRÓXIMOS EVENTOS (PÚBLICO) ═══════════════════ -->
-<div id="tab-eventos" class="tab active">
+<!-- ═══ QUEM SOMOS (PUBLIC) ═══ -->
+<div id="tab-quem-somos" class="tab active">
+  <div class="hero-team" id="heroTeam">
+    <div class="hero-placeholder" id="heroPlaceholder">
+      <span style="font-size:4rem;">🏐</span>
+      <p style="color:var(--gray-m);font-size:0.85rem;">Foto da equipe · Adicionada pelo Admin</p>
+    </div>
+    <img id="heroImg" class="hero-photo" style="display:none;" alt="Equipe">
+    <div class="hero-overlay">
+      <h2 id="heroNome">VolêiBros</h2>
+      <p id="heroTagline">Time de Elite · Camocim, CE</p>
+    </div>
+  </div>
+
+  <div class="card" id="heroDescCard" style="display:none;">
+    <p id="heroDesc" style="color:var(--cream);line-height:1.7;font-size:0.9rem;"></p>
+  </div>
+
+  <div class="section-title">👥 Nossos Atletas</div>
+  <div class="players-grid" id="publicPlayerGrid">
+    <div style="text-align:center;padding:48px;color:var(--gray-m);font-size:0.9rem;grid-column:1/-1;">
+      Atletas serão exibidos aqui pelo admin. 🏐
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EVENTOS (PUBLIC) ═══ -->
+<div id="tab-eventos" class="tab">
   <div class="stats-row">
     <div class="stat-box"><div class="stat-num" id="pubStatJogos">0</div><div class="stat-label">Jogos</div></div>
     <div class="stat-box"><div class="stat-num" id="pubStatTorneios">0</div><div class="stat-label">Torneios</div></div>
     <div class="stat-box"><div class="stat-num" id="pubStatTreinos">0</div><div class="stat-label">Treinos</div></div>
-    <div class="stat-box"><div class="stat-num" id="pubStatJogadores">0</div><div class="stat-label">Jogadores</div></div>
+    <div class="stat-box"><div class="stat-num" id="pubStatAtletas">0</div><div class="stat-label">Atletas</div></div>
   </div>
-
-  <!-- Grade Semanal fixa -->
   <div class="card">
-    <div class="card-title">🗓️ Grade Semanal de Treinos (Seg / Qua / Sex)</div>
+    <div class="card-title">🗓️ Grade Semanal (Seg / Qua / Sex)</div>
     <div class="grade-3col">
-      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEGUNDA</div>
-        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
-        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
-      </div>
-      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">QUARTA</div>
-        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
-        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
-      </div>
-      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEXTA</div>
-        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
-        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
-      </div>
+      <div class="grade-day"><div class="grade-day-name">SEGUNDA</div><div class="grade-day-time">🕖 19:00 – 20:30</div><div class="grade-day-loc">📍 Escola</div><div style="margin-top:8px;"><span class="badge badge-treino">Treino</span></div></div>
+      <div class="grade-day"><div class="grade-day-name">QUARTA</div><div class="grade-day-time">🕖 19:00 – 20:30</div><div class="grade-day-loc">📍 Escola</div><div style="margin-top:8px;"><span class="badge badge-treino">Treino</span></div></div>
+      <div class="grade-day"><div class="grade-day-name">SEXTA</div><div class="grade-day-time">🕖 19:00 – 20:30</div><div class="grade-day-loc">📍 Escola</div><div style="margin-top:8px;"><span class="badge badge-treino">Treino</span></div></div>
     </div>
   </div>
-
-  <div class="section-title">🏐 Próximos Eventos</div>
+  <div class="section-title">📅 Próximos Eventos</div>
   <div class="event-list" id="publicEventList">
-    <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">
-      Nenhum evento cadastrado ainda. 🏐
+    <div style="text-align:center;padding:48px;color:var(--gray-m);font-size:0.9rem;">Nenhum evento cadastrado ainda. 🏐</div>
+  </div>
+</div>
+
+<!-- ═══ CONQUISTAS (PUBLIC) ═══ -->
+<div id="tab-conquistas" class="tab">
+  <div class="section-title">🏆 Nossas Conquistas</div>
+  <div class="conquistas-grid" id="publicConquistaGrid">
+    <div style="text-align:center;padding:60px;color:var(--gray-m);font-size:0.9rem;grid-column:1/-1;">
+      As conquistas serão exibidas aqui pelo admin. 🏆
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════ AGENDA (ADMIN) ═══════════════════ -->
+<!-- ═══ TREINOS (PUBLIC) ═══ -->
+<div id="tab-treinos" class="tab">
+  <div class="section-title">💪 Plano de Treinos</div>
+  <p style="color:var(--gray-m);margin-bottom:24px;font-size:0.88rem;">Treinos nas segundas, quartas e sextas — 19h às 20h30 na Escola</p>
+  <div class="training-grid">
+    <div class="training-card">
+      <div class="training-header"><div class="training-icon">⚡</div><div><h3>Treino de Ataque</h3><p>Spike, Cortada & Finalização</p></div></div>
+      <div class="training-body">
+        <div class="drill"><h4>🔸 Aquecimento de ombros</h4><p>Rotações do ombro com elástico. Movimento pendular para soltar a articulação.</p><div class="drill-meta">⏱ 5 min · Início do treino</div></div>
+        <div class="drill"><h4>🔸 Salto pé-a-passo (Armada)</h4><p>Passada de 3 passos: esq → dir → esq. Saltar no último passo, converter energia horizontal em vertical.</p><div class="drill-meta">⏱ 10 min · 4 séries de 8 rep.</div></div>
+        <div class="drill"><h4>🔸 Cortada com bola jogada</h4><p>Parceiro levanta, atacante executa cortada com direção definida: diagonal, paralela, tubão.</p><div class="drill-meta">⏱ 20 min · 3 séries × 10 bolas</div></div>
+        <div class="drill"><h4>📚 Teoria</h4><p>Cortada eficaz: <strong>timing</strong> + <strong>posicionamento</strong> (diagonal de fora p/ dentro) + <strong>variação</strong> de ângulos.</p></div>
+      </div>
+    </div>
+    <div class="training-card">
+      <div class="training-header"><div class="training-icon">🛡️</div><div><h3>Treino de Recepção</h3><p>Manchete, Posição & Leitura</p></div></div>
+      <div class="training-body">
+        <div class="drill"><h4>🔸 Posição base</h4><p>Joelhos semi-flexionados, pés na largura dos ombros, peso levemente à frente, braços prontos.</p><div class="drill-meta">⏱ 5 min · Comandos sonoros</div></div>
+        <div class="drill"><h4>🔸 Manchete estática</h4><p>Braços estendidos e juntos, impacto no terço inferior dos antebraços, cotovelos firmes.</p><div class="drill-meta">⏱ 10 min · 30 repetições</div></div>
+        <div class="drill"><h4>🔸 Recepção de saque</h4><p>Parceiro saca com diferentes velocidades. Receptor lê trajetória e direciona para zona 3.</p><div class="drill-meta">⏱ 20 min · Séries de 15 saques</div></div>
+        <div class="drill"><h4>📚 Teoria</h4><p>Bola recebida deve ir sempre ao <strong>levantador (zona 2/3)</strong>, 2–3m acima da rede. Consistência > potência.</p></div>
+      </div>
+    </div>
+    <div class="training-card">
+      <div class="training-header"><div class="training-icon">🤲</div><div><h3>Treino de Toque</h3><p>Levantamento & Precisão</p></div></div>
+      <div class="training-body">
+        <div class="drill"><h4>🔸 Toque individual</h4><p>Dedos formando triângulo (polegar + indicador), pulseiras duras no contato. Controle estático, depois em movimento.</p><div class="drill-meta">⏱ 10 min · 50 toques</div></div>
+        <div class="drill"><h4>🔸 Levantamento com alvo</h4><p>Parceiro recebe manchete, você levanta para zona 4 ou zona 2 conforme combinado.</p><div class="drill-meta">⏱ 15 min · 3 séries de 10</div></div>
+        <div class="drill"><h4>📚 Teoria</h4><p>Levantador é o "maestro": <strong>60% ponteiro oposto</strong>, 30% central, 10% surpresas (costas, quick).</p></div>
+      </div>
+    </div>
+    <div class="training-card">
+      <div class="training-header"><div class="training-icon">🧱</div><div><h3>Treino de Bloqueio</h3><p>Block, Timing & Posicionamento</p></div></div>
+      <div class="training-body">
+        <div class="drill"><h4>🔸 Salto vertical explosivo</h4><p>Agachamento rápido → impulso máximo. 3 séries de 10 saltos. Subir quando a bola começa a descer.</p><div class="drill-meta">⏱ 8 min</div></div>
+        <div class="drill"><h4>🔸 Block com deslocamento lateral</h4><p>Deslizar ao longo da rede (passo cruzado) e saltar. Não cruzar os pés — passos laterais coordenados.</p><div class="drill-meta">⏱ 12 min</div></div>
+        <div class="drill"><h4>📚 Teoria</h4><p><strong>Regra de ouro:</strong> prefira canalizar o ataque a bloquear na força — timing importa mais que físico.</p></div>
+      </div>
+    </div>
+    <div class="training-card">
+      <div class="training-header"><div class="training-icon">🏃</div><div><h3>Defesa / Líbero</h3><p>Mergulho, Rolamento & Cobertura</p></div></div>
+      <div class="training-body">
+        <div class="drill"><h4>🔸 Posição defensiva baixa</h4><p>Centro de gravidade baixo, joelhos bem dobrados, mão ativa. Deslocamento rápido 3m para cada lado.</p><div class="drill-meta">⏱ 8 min</div></div>
+        <div class="drill"><h4>🔸 Rolamento lateral</h4><p>Ao mergulhar: rolar de lado para absorver impacto, nunca cair de bruços.</p><div class="drill-meta">⏱ 10 min · Em duplas</div></div>
+        <div class="drill"><h4>📚 Teoria</h4><p>Defesa começa com <strong>leitura do atacante</strong>: ombro, braço, corpo. Líbero cobre espaço deixado pelo bloqueio.</p></div>
+      </div>
+    </div>
+    <div class="training-card">
+      <div class="training-header"><div class="training-icon">🏋️</div><div><h3>Condicionamento</h3><p>Resistência, Explosão & Mobilidade</p></div></div>
+      <div class="training-body">
+        <div class="drill"><h4>🔸 Circuito de saltos</h4><p>Caixa de salto → afundo lateral → salto vertical máximo → polichinelo. 3 rounds 45 segundos.</p><div class="drill-meta">⏱ 12 min</div></div>
+        <div class="drill"><h4>🔸 Agility ladder</h4><p>Passos laterais rápidos na escada de agilidade. Reatividade de pés — essencial para defesa.</p><div class="drill-meta">⏱ 10 min</div></div>
+        <div class="drill"><h4>💡 Dica Nutricional</h4><p>Antes (1h): banana + aveia. Durante: água a cada 15 min. Após: proteína + carboidrato. Hidrate-se no calor do nordeste! 🌞</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-title" style="margin-top:32px;">📆 Plano Semanal</div>
+  <div class="card">
+    <div style="display:grid;gap:10px;">
+      <div class="plano-linha"><div style="font-family:'Bebas Neue';font-size:1rem;color:#2ecc71;">SEGUNDA</div><div style="font-size:0.83rem;color:var(--cream);">Aquecimento (5') → Recepção de saque (20') → Ataque por zona (20') → Jogo livre (30') → Alongamento (5')</div></div>
+      <div class="plano-linha"><div style="font-family:'Bebas Neue';font-size:1rem;color:#2ecc71;">QUARTA</div><div style="font-size:0.83rem;color:var(--cream);">Aquecimento (5') → Bloqueio (20') → Defesa / Rolamento (20') → Toque (15') → Jogo situacional (20') → Alongamento (5')</div></div>
+      <div class="plano-linha"><div style="font-family:'Bebas Neue';font-size:1rem;color:#2ecc71;">SEXTA</div><div style="font-size:0.83rem;color:var(--cream);">Aquecimento (5') → Condicionamento (20') → Treino integrado (20') → Jogo 5x5 (35') → Alongamento (5')</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ REGRAS (PUBLIC) ═══ -->
+<div id="tab-regras" class="tab">
+  <div class="section-title">📖 Regras Oficiais</div>
+  <div class="rules-grid">
+    <div class="rule-card"><h3>🏟️ A Quadra</h3><ul><li>Dimensões: 18m × 9m (dividida pela rede)</li><li>Zona de ataque: 3m a partir da rede</li><li>Rede: 2,43m (masc.) / 2,24m (fem.)</li><li>Área livre mínima: 3m em todos os lados</li></ul></div>
+    <div class="rule-card"><h3>🏐 O Jogo</h3><ul><li>Máximo 3 toques por lado antes de passar</li><li>Mesmo jogador não toca duas vezes seguidas (exceto no bloqueio)</li><li>Rotação no sentido horário a cada saque conquistado</li><li>6 jogadores em quadra por equipe</li></ul></div>
+    <div class="rule-card"><h3>📊 Pontuação (Rally Point)</h3><ul><li>Cada rally vale 1 ponto (independente de quem sacou)</li><li>Sets 1–4: 25 pontos (mín. 2 de vantagem)</li><li>5º set: 15 pontos (mín. 2 de vantagem)</li><li>Trocar de lado no 5º set a cada 8 pontos</li></ul></div>
+    <div class="rule-card"><h3>❌ Infrações</h3><ul><li>Pisar ou cruzar a linha central</li><li>Tocar na rede ao atacar ou bloquear</li><li>Bola fora das linhas da quadra</li><li>Segurar ou conduzir a bola</li><li>Erro de rotação ou posição no saque</li></ul></div>
+    <div class="rule-card"><h3>🏅 Saque</h3><ul><li>Cobrado atrás da linha de fundo</li><li>Float, jump float ou jump serve</li><li>Toque na rede mas passou: válido</li><li>8 segundos após apito para sacar</li></ul></div>
+    <div class="rule-card"><h3>🤸 O Líbero</h3><ul><li>Especialista em defesa — colete diferenciado</li><li>Não pode sacar, bloquear ou atacar acima da rede</li><li>Substitui qualquer jogador na defesa sem contar sub.</li><li>Se fizer toque acima da rede: ataque inválido</li></ul></div>
+  </div>
+  <div class="section-title" style="margin-top:32px;">🏆 Sistemas de Chaveamento</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;">
+    <div class="card">
+      <div class="card-title">🔑 Chave de 3 Times</div>
+      <div style="font-size:0.83rem;color:var(--cream);line-height:1.8;">
+        <p><strong style="color:var(--gold);">Formato:</strong> Todos contra todos (turno único).</p><br>
+        <p>A vs B · A vs C · B vs C</p><br>
+        <p><strong style="color:var(--gold);">Classificação:</strong> Vitórias → saldo de sets → saldo de pontos → confronto direto → sorteio</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🔑 Chave de 4 Times</div>
+      <div style="font-size:0.83rem;color:var(--cream);line-height:1.8;">
+        <p><strong style="color:var(--gold);">Fase de grupos + Eliminatória:</strong></p>
+        <p>• 1ª fase: A vs B e C vs D</p>
+        <p>• Semifinal cruzada</p>
+        <p>• Final: vencedores se enfrentam</p><br>
+        <p><strong style="color:var(--gold);">Desempate:</strong> saldo de sets → pontos → confronto direto</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AGENDA (ADMIN) ═══ -->
 <div id="tab-agenda" class="tab">
-  <div class="stats-row" id="statsRow">
+  <div class="stats-row">
     <div class="stat-box"><div class="stat-num" id="statJogos">0</div><div class="stat-label">Jogos</div></div>
     <div class="stat-box"><div class="stat-num" id="statTorneios">0</div><div class="stat-label">Torneios</div></div>
     <div class="stat-box"><div class="stat-num" id="statTreinos">0</div><div class="stat-label">Treinos</div></div>
-    <div class="stat-box"><div class="stat-num" id="statJogadores">0</div><div class="stat-label">Jogadores</div></div>
+    <div class="stat-box"><div class="stat-num" id="statAtletas">0</div><div class="stat-label">Atletas</div></div>
   </div>
-
   <div class="card">
     <div class="card-title">📅 Adicionar Evento</div>
     <div class="form-grid">
-      <div class="form-group">
-        <label>Tipo</label>
-        <select id="evTipo" onchange="updateEvForm()">
-          <option value="jogo">🏐 Jogo</option>
-          <option value="torneio">🏆 Torneio</option>
-          <option value="treino">💪 Treino</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Nome / Descrição</label>
-        <input id="evNome" type="text" placeholder="Ex: Jogo dos Amigos, Torneio Municipal...">
-      </div>
-      <div class="form-group">
-        <label>Data</label>
-        <input id="evData" type="date">
-      </div>
-      <div class="form-group">
-        <label>Horário</label>
-        <input id="evHora" type="time">
-      </div>
-      <div class="form-group">
-        <label>Local</label>
-        <input id="evLocal" type="text" placeholder="Quadra, endereço...">
-      </div>
-      <div class="form-group" id="modalidadeGroup">
-        <label>Modalidade</label>
-        <select id="evModalidade">
-          <option value="quinteto">Quinteto (5x5)</option>
-          <option value="dupla">Dupla (2x2)</option>
-          <option value="trio">Trio (3x3)</option>
-          <option value="quadra">Quadra (4x4)</option>
-          <option value="seis">Seis (6x6)</option>
-        </select>
-      </div>
+      <div class="form-group"><label>Tipo</label><select id="evTipo"><option value="jogo">🏐 Jogo</option><option value="torneio">🏆 Torneio</option><option value="treino">💪 Treino</option></select></div>
+      <div class="form-group"><label>Nome / Descrição</label><input id="evNome" type="text" placeholder="Ex: Jogo dos Amigos..."></div>
+      <div class="form-group"><label>Data</label><input id="evData" type="date"></div>
+      <div class="form-group"><label>Horário</label><input id="evHora" type="time"></div>
+      <div class="form-group"><label>Local</label><input id="evLocal" type="text" placeholder="Quadra, endereço..."></div>
+      <div class="form-group"><label>Modalidade</label><select id="evModalidade"><option value="quinteto">Quinteto (5x5)</option><option value="dupla">Dupla (2x2)</option><option value="trio">Trio (3x3)</option><option value="quadra">Quadra (4x4)</option><option value="seis">Seis (6x6)</option></select></div>
     </div>
     <div class="form-group" style="margin-top:14px;">
       <label>Participantes</label>
       <div class="multiselect-container" id="participantesContainer" onclick="toggleMultiselect()">
-        <div style="background:rgba(255,255,255,0.07);border:1.5px solid rgba(232,192,96,0.3);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:0.85rem;color:var(--gray);">
-          Clique para selecionar participantes...
-        </div>
+        <div style="background:var(--bg2);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:0.85rem;color:var(--gray-m);">Clique para selecionar...</div>
         <div class="multiselect-dropdown" id="participantesDropdown"></div>
       </div>
       <div class="selected-tags" id="selectedTags"></div>
     </div>
-    <div class="form-group" style="margin-top:14px;">
-      <label>Observações</label>
-      <textarea id="evObs" placeholder="Informações adicionais..."></textarea>
-    </div>
+    <div class="form-group" style="margin-top:14px;"><label>Observações</label><textarea id="evObs" placeholder="Informações adicionais..."></textarea></div>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="addEvent()">✅ Adicionar Evento</button>
-      <button class="btn btn-whatsapp btn-sm" onclick="notifyAll()">📲 Avisar Todos no WhatsApp</button>
+      <button class="btn btn-whatsapp btn-sm" onclick="notifyAll()">📲 Avisar Todos</button>
     </div>
   </div>
-
-  <!-- Grade Semanal -->
-  <div class="card">
-    <div class="card-title">🗓️ Grade Semanal de Treinos (Seg / Qua / Sex)</div>
-    <div class="grade-3col">
-      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEGUNDA</div>
-        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
-        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
-      </div>
-      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">QUARTA</div>
-        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
-        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
-      </div>
-      <div style="background:rgba(39,174,96,0.15);border:1px solid rgba(39,174,96,0.4);border-radius:12px;padding:16px;text-align:center;">
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:#27ae60;">SEXTA</div>
-        <div style="font-size:0.8rem;color:var(--sand);margin-top:6px;">🕖 19:00 – 20:30</div>
-        <div style="font-size:0.75rem;color:var(--gray);margin-top:4px;">📍 Escola</div>
-        <div style="margin-top:8px;"><span class="badge badge-treino">Treino Regular</span></div>
-      </div>
-    </div>
-  </div>
-
   <div class="section-title">🏐 Todos os Eventos</div>
-  <div class="event-list" id="eventList">
-    <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">
-      Nenhum evento cadastrado ainda. Adicione um acima! 🏐
-    </div>
-  </div>
+  <div class="event-list" id="eventList"><div style="text-align:center;padding:48px;color:var(--gray-m);">Nenhum evento cadastrado ainda. 🏐</div></div>
 </div>
 
-<!-- ═══════════════════ JOGADORES (ADMIN) ═══════════════════ -->
-<div id="tab-jogadores" class="tab">
+<!-- ═══ ATLETAS (ADMIN) ═══ -->
+<div id="tab-atletas" class="tab">
   <div class="card">
-    <div class="card-title">➕ Cadastrar Jogador</div>
+    <div class="card-title">➕ Cadastrar Atleta</div>
     <div class="form-grid">
-      <div class="form-group">
-        <label>Nome Completo</label>
-        <input id="pNome" type="text" placeholder="Nome do jogador">
+      <div class="form-group"><label>Nome Completo</label><input id="pNome" type="text" placeholder="Nome do atleta"></div>
+      <div class="form-group"><label>Apelido / Nick</label><input id="pApelido" type="text" placeholder="Apelido"></div>
+      <div class="form-group"><label>Nº Camisa</label><input id="pNumero" type="text" placeholder="Ex: 10"></div>
+      <div class="form-group"><label>Posição</label>
+        <select id="pPosicao"><option value="Líbero">Líbero</option><option value="Levantador">Levantador</option><option value="Ponteiro">Ponteiro</option><option value="Oposto">Oposto</option><option value="Central">Central</option><option value="Universal">Universal</option></select>
       </div>
-      <div class="form-group">
-        <label>Apelido</label>
-        <input id="pApelido" type="text" placeholder="Apelido / nick">
-      </div>
-      <div class="form-group">
-        <label>WhatsApp (com DDD)</label>
-        <input id="pWhatsapp" type="tel" placeholder="85999999999">
-      </div>
-      <div class="form-group">
-        <label>Posição</label>
-        <select id="pPosicao">
-          <option value="Líbero">Líbero</option>
-          <option value="Levantador">Levantador</option>
-          <option value="Ponteiro">Ponteiro</option>
-          <option value="Oposto">Oposto</option>
-          <option value="Central">Central</option>
-          <option value="Universal">Universal</option>
+      <div class="form-group"><label>WhatsApp (com DDD)</label><input id="pWhatsapp" type="tel" placeholder="85999999999"></div>
+      <div class="form-group"><label>Foto do Atleta</label><input id="pFoto" type="file" accept="image/*"></div>
+    </div>
+    <div class="form-group" style="margin-top:14px;"><label>Bio / Apresentação</label><textarea id="pBio" placeholder="Pequena apresentação do atleta..."></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="addPlayer()">✅ Cadastrar Atleta</button></div>
+  </div>
+  <div class="section-title">👥 Elenco</div>
+  <div class="players-grid" id="playerGrid"><div style="text-align:center;padding:48px;color:var(--gray-m);grid-column:1/-1;">Nenhum atleta cadastrado ainda 🏐</div></div>
+</div>
+
+<!-- ═══ CONQUISTAS ADMIN ═══ -->
+<div id="tab-admin-conquistas" class="tab">
+  <div class="card">
+    <div class="card-title">➕ Registrar Conquista</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Título da Conquista</label><input id="cTitulo" type="text" placeholder="Ex: Campeões do Torneio Municipal"></div>
+      <div class="form-group"><label>Data</label><input id="cData" type="date"></div>
+      <div class="form-group"><label>Medalha</label>
+        <select id="cTipo">
+          <option value="ouro">🥇 1º Lugar (Ouro)</option>
+          <option value="prata">🥈 2º Lugar (Prata)</option>
+          <option value="bronze">🥉 3º Lugar (Bronze)</option>
+          <option value="participacao">🏅 Participação</option>
         </select>
       </div>
+      <div class="form-group"><label>Foto (opcional)</label><input id="cFoto" type="file" accept="image/*"></div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="addPlayer()">✅ Cadastrar Jogador</button>
-    </div>
+    <div class="form-group" style="margin-top:14px;"><label>Descrição</label><textarea id="cDescricao" placeholder="Descreva a conquista..."></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="addConquista()">🏆 Registrar Conquista</button></div>
   </div>
-  <div class="section-title">👥 Equipe</div>
-  <div class="players-grid" id="playerGrid">
-    <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;grid-column:1/-1;">
-      Nenhum jogador cadastrado ainda 🏐
-    </div>
-  </div>
+  <div class="section-title">🏆 Conquistas Registradas</div>
+  <div class="conquistas-grid" id="adminConquistaGrid"><div style="text-align:center;padding:48px;color:var(--gray-m);grid-column:1/-1;">Nenhuma conquista registrada ainda 🏆</div></div>
 </div>
 
-<!-- ═══════════════════ TREINOS (PÚBLICO + ADMIN) ═══════════════════ -->
-<div id="tab-treinos" class="tab">
-  <div class="section-title">💪 Plano de Treinos Completo</div>
-  <p style="color:var(--gray);margin-bottom:24px;font-size:0.9rem;">Treinos nas segundas, quartas e sextas — 19h às 20h30 na Escola</p>
-
-  <div class="training-grid">
-
-    <div class="training-card">
-      <div class="training-header">
-        <div class="training-icon">⚡</div>
-        <div>
-          <h3>Treino de Ataque</h3>
-          <p>Spike, Cortada & Finalização</p>
-        </div>
-      </div>
-      <div class="training-body">
-        <div class="drill">
-          <h4>🔸 Aquecimento de ombros</h4>
-          <p>Rotações do ombro com elástico ou sem peso. Movimento pendular para soltar a articulação.</p>
-          <div class="drill-meta">⏱ 5 min · Início do treino</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Salto pé-a-passo (Armada)</h4>
-          <p>Pratique a passada de 3 passos: esquerda → direita → esquerda (ou invertido para canhoto). Saltar no último passo, converter energia horizontal em vertical.</p>
-          <div class="drill-meta">⏱ 10 min · 4 séries de 8 repetições</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Cortada no cone (sem bola)</h4>
-          <p>Simule o gesto da cortada: braço de ataque em "arco", mão passando rente à cabeça, punho firme no contato, snap de pulso para direcionar a bola.</p>
-          <div class="drill-meta">⏱ 8 min · Espelho ou filmagem</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Cortada com bola jogada</h4>
-          <p>Parceiro levanta, atacante executa a cortada com direção definida: diagonal, paralela, tubão. Alterne direções a cada 5 repetições.</p>
-          <div class="drill-meta">⏱ 20 min · 3 séries × 10 bolas</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Ataque em velocidade variada</h4>
-          <p>Atacar 3 bolas fortes → 2 bolas de colocação. Treina leitura do bloqueio adversário e variação de força.</p>
-          <div class="drill-meta">⏱ 15 min · Jogo situacional</div>
-        </div>
-        <div class="drill">
-          <h4>📚 Teoria — Ataque</h4>
-          <p>A cortada eficaz depende de: <strong>timing</strong> (saltar quando a bola está no ponto alto do levantamento), <strong>posicionamento</strong> (atacante deve correr de fora para dentro em diagonal), e <strong>variação</strong> (evitar sempre atacar no mesmo local).</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="training-card">
-      <div class="training-header">
-        <div class="training-icon">🛡️</div>
-        <div>
-          <h3>Treino de Recepção</h3>
-          <p>Manchete, Posição & Leitura</p>
-        </div>
-      </div>
-      <div class="training-body">
-        <div class="drill">
-          <h4>🔸 Posição base (ready position)</h4>
-          <p>Joelhos semiflexionados, pés afastados na largura dos ombros, peso levemente à frente, braços prontos. Treinar entrar rápido nessa posição a partir de comando.</p>
-          <div class="drill-meta">⏱ 5 min · Comandos sonoros</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Manchete estática</h4>
-          <p>Braços estendidos e juntos, impacto no terço inferior dos antebraços, cotovelos firmes. Jogar bola contra parede com manchete controlada.</p>
-          <div class="drill-meta">⏱ 10 min · 30 repetições</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Recepção de saque (float e jump serve)</h4>
-          <p>Parceiro saca com diferentes velocidades. Receptor lê trajetória, se move 2 passos laterais e recebe com manchete direcionando para zona 3 (levantador).</p>
-          <div class="drill-meta">⏱ 20 min · Séries de 15 saques</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Recepção e transição</h4>
-          <p>Após receber, mover rápido para posição de ataque ou cobertura. Treina a transição defesa → ataque, essencial em jogo real.</p>
-          <div class="drill-meta">⏱ 15 min · Jogo situacional</div>
-        </div>
-        <div class="drill">
-          <h4>📚 Teoria — Recepção</h4>
-          <p>Uma boa recepção é a base do ataque. A bola recebida deve ir sempre para o <strong>levantador (zona 2/3)</strong>, com altura entre 2–3m acima da rede. Erros de recepção custam ponto diretamente — priorize consistência antes de potência.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="training-card">
-      <div class="training-header">
-        <div class="training-icon">🤲</div>
-        <div>
-          <h3>Treino de Toque</h3>
-          <p>Levantamento & Precisão</p>
-        </div>
-      </div>
-      <div class="training-body">
-        <div class="drill">
-          <h4>🔸 Toque individual (bump up)</h4>
-          <p>Dedos afastados formando triângulo (polegar + indicador), pulseiras duras no contato. Tocar bola para cima mantendo controle. Iniciar estático, evoluir em movimento.</p>
-          <div class="drill-meta">⏱ 10 min · 50 toques contínuos</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Toque na parede</h4>
-          <p>Tocar bola contra parede repetidamente, variando distância. Exige precisão e consistência de pulsos.</p>
-          <div class="drill-meta">⏱ 8 min · Séries de 20</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Levantamento com alvo</h4>
-          <p>Parceiro recebe manchete, você levanta para zona 4 ou zona 2 conforme combinado. Foco em altura constante (bola deve subir pelo menos 1m acima da rede).</p>
-          <div class="drill-meta">⏱ 15 min · 3 séries de 10</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Levantamento rápido (quick set)</h4>
-          <p>Levantamento baixo e veloz para central. Cria desequilíbrio no bloqueio adversário. Exige coordenação com o atacante.</p>
-          <div class="drill-meta">⏱ 10 min · Com atacante</div>
-        </div>
-        <div class="drill">
-          <h4>📚 Teoria — Toque/Levantamento</h4>
-          <p>O levantador é o "maestro" do time. Deve distribuir bem entre os atacantes, nunca ser previsível. Uma boa regra: <strong>60% para o ponteiro oposto, 30% para a central, 10% de surpresas</strong> (levantamento de costas, quick...).</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="training-card">
-      <div class="training-header">
-        <div class="training-icon">🧱</div>
-        <div>
-          <h3>Treino de Bloqueio</h3>
-          <p>Block, Timing & Posicionamento</p>
-        </div>
-      </div>
-      <div class="training-body">
-        <div class="drill">
-          <h4>🔸 Salto vertical explosivo</h4>
-          <p>Agachamento rápido → impulso máximo. 3 séries de 10 saltos. Foco: subir quando a bola começa a descer no toque do adversário.</p>
-          <div class="drill-meta">⏱ 8 min · Aquecimento de bloqueio</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Block com deslocamento lateral</h4>
-          <p>Deslizar ao longo da rede (passo cruzado) e saltar para bloquear. Não cruzar os pés — usar passos laterais coordenados.</p>
-          <div class="drill-meta">⏱ 12 min · 3 séries laterais</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Bloqueio individual com atacante</h4>
-          <p>Atacante bate bolas variadas, bloqueador salta em frente. Foco: mãos acima da rede, dedos abertos, penetrar ligeiramente no lado adversário.</p>
-          <div class="drill-meta">⏱ 15 min · 20 bloqueios</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Bloqueio de dupla / triplo</h4>
-          <p>Dois ou três jogadores coordenam o salto. Comunicação antes: "meu bloco" ou "você fecha, eu abro". Evitar buracos entre os braços.</p>
-          <div class="drill-meta">⏱ 15 min · Situacional</div>
-        </div>
-        <div class="drill">
-          <h4>📚 Teoria — Bloqueio</h4>
-          <p>O bloqueio é tanto uma ação de ponto quanto de canalização. Um bloqueio bem posicionado força o atacante para áreas onde os defensores estão prontos. <strong>Regra de ouro:</strong> prefira canalizar o ataque a tentar bloquear na força — o timing importa mais que o físico.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="training-card">
-      <div class="training-header">
-        <div class="training-icon">🏃</div>
-        <div>
-          <h3>Treino de Defesa / Líbero</h3>
-          <p>Mergulho, Rolamento & Cobertura</p>
-        </div>
-      </div>
-      <div class="training-body">
-        <div class="drill">
-          <h4>🔸 Posição defensiva baixa</h4>
-          <p>Centro de gravidade baixo, joelhos bem dobrados, mão ativa. Treinar deslocamento rápido de 3m para cada lado saindo dessa posição.</p>
-          <div class="drill-meta">⏱ 8 min</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Rolamento lateral (barrel roll)</h4>
-          <p>Ao mergulhar para salvar bola no chão: rolar de lado para absorver o impacto, nunca cair de bruços. Praticar rolamento em tatame ou quadra macia.</p>
-          <div class="drill-meta">⏱ 10 min · Em duplas</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Defesa de cortada cruzada</h4>
-          <p>Parceiro ataca de zona 4, defensor posicionado na diagonal lê e bate a manchete. 3 séries de 10 defesas.</p>
-          <div class="drill-meta">⏱ 15 min</div>
-        </div>
-        <div class="drill">
-          <h4>📚 Teoria — Defesa</h4>
-          <p>A defesa no vôlei começa com <strong>leitura do atacante</strong>: observar ombro, braço e corpo para antecipar a direção. O líbero deve sempre cobrir o espaço deixado pelo bloqueio.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="training-card">
-      <div class="training-header">
-        <div class="training-icon">🏋️</div>
-        <div>
-          <h3>Condicionamento Físico</h3>
-          <p>Resistência, Explosão & Mobilidade</p>
-        </div>
-      </div>
-      <div class="training-body">
-        <div class="drill">
-          <h4>🔸 Circuito de saltos</h4>
-          <p>Caixa de salto → afundo lateral → salto vertical máximo → polichinelo. 3 rounds de 45 segundos cada.</p>
-          <div class="drill-meta">⏱ 12 min</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Agility ladder (escada)</h4>
-          <p>Passos laterais rápidos na escada de agilidade. Melhora reatividade de pés, essencial para defesa e recepção.</p>
-          <div class="drill-meta">⏱ 10 min</div>
-        </div>
-        <div class="drill">
-          <h4>🔸 Mobilidade de tornozelos e quadril</h4>
-          <p>Círculos de tornozelo, afundos profundos, abertura de quadril. Previne lesões comuns do vôlei (entorse, tendinite).</p>
-          <div class="drill-meta">⏱ 10 min · Pré e pós treino</div>
-        </div>
-        <div class="drill">
-          <h4>📚 Dica Nutricional</h4>
-          <p>Antes do treino (1h antes): banana + aveia ou pão integral. Durante: água a cada 15 min. Após: proteína + carboidrato complexo. Hidratação é essencial no calor do nordeste! 🌞</p>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title" style="margin-top:32px;">📆 Plano Semanal Estruturado</div>
-  <div class="card">
-    <div style="display:grid;gap:10px;">
-      <div class="plano-linha">
-        <div style="font-family:'Bebas Neue';font-size:1rem;color:#27ae60;">SEGUNDA</div>
-        <div style="font-size:0.85rem;color:var(--sand);">Aquecimento (5') → Recepção de saque (20') → Ataque por zona (20') → Jogo livre (30') → Alongamento (5')</div>
-      </div>
-      <div class="plano-linha">
-        <div style="font-family:'Bebas Neue';font-size:1rem;color:#27ae60;">QUARTA</div>
-        <div style="font-size:0.85rem;color:var(--sand);">Aquecimento (5') → Bloqueio (20') → Defesa / Rolamento (20') → Fundamentos de toque (15') → Jogo situacional (20') → Alongamento (5')</div>
-      </div>
-      <div class="plano-linha">
-        <div style="font-family:'Bebas Neue';font-size:1rem;color:#27ae60;">SEXTA</div>
-        <div style="font-size:0.85rem;color:var(--sand);">Aquecimento (5') → Condicionamento físico (20') → Treino integrado (ataque + recepção) (20') → Jogo completo 5x5 (35') → Alongamento final (5')</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ REGRAS (PÚBLICO + ADMIN) ═══════════════════ -->
-<div id="tab-regras" class="tab">
-  <div class="section-title">📖 Regras Oficiais do Vôlei</div>
-
-  <div class="rules-grid">
-    <div class="rule-card">
-      <h3>🏟️ A Quadra</h3>
-      <ul>
-        <li>Dimensões: 18m × 9m (dividida ao meio pela rede)</li>
-        <li>Zona de ataque: 3m a partir da rede em cada lado</li>
-        <li>Rede: altura de 2,43m (masculino) / 2,24m (feminino)</li>
-        <li>Área livre mínima: 3m em todos os lados</li>
-        <li>Linha central: divide as duas quadras ao meio</li>
-      </ul>
-    </div>
-    <div class="rule-card">
-      <h3>🏐 O Jogo</h3>
-      <ul>
-        <li>Cada equipe toca a bola no máximo 3 vezes antes de passar</li>
-        <li>O mesmo jogador não pode tocar duas vezes seguidas (exceto no bloqueio)</li>
-        <li>Rotação: jogadores giram no sentido horário a cada novo saque conquistado</li>
-        <li>6 jogadores em quadra por equipe (5x5 ou 2x2 no beach)</li>
-        <li>Substituições: até 6 por set (líbero não conta)</li>
-      </ul>
-    </div>
-    <div class="rule-card">
-      <h3>📊 Pontuação (Rally Point)</h3>
-      <ul>
-        <li>Sistema de Rally Point: cada rally vale 1 ponto (independente de quem sacou)</li>
-        <li>Sets de 1 a 4: ganhos com 25 pontos (mínimo 2 de vantagem)</li>
-        <li>Set decisivo (5º): ganho com 15 pontos (mínimo 2 de vantagem)</li>
-        <li>Partida: melhor de 5 sets (primeiros 4 chegam a 25, 5º a 15)</li>
-        <li>Trocar de lado no 5º set a cada 8 pontos</li>
-      </ul>
-    </div>
-    <div class="rule-card">
-      <h3>❌ Infrações (faltas)</h3>
-      <ul>
-        <li>Pisar ou cruzar a linha central pelo lado de baixo da rede</li>
-        <li>Tocar na rede ao atacar ou bloquear</li>
-        <li>Bola cai fora das linhas da quadra</li>
-        <li>Segurar ou conduzir a bola (retenção)</li>
-        <li>Erro de rotação ou de posição no momento do saque</li>
-      </ul>
-    </div>
-    <div class="rule-card">
-      <h3>🏅 Saque</h3>
-      <ul>
-        <li>Cobrado atrás da linha de fundo (zona de saque)</li>
-        <li>Pode ser flutuante (float), viagem (jump float) ou em salto (jump serve)</li>
-        <li>A bola não pode tocar na rede e cair no lado do sacador</li>
-        <li>Toque na rede mas passou para o lado adversário = válido</li>
-        <li>Jogador tem 8 segundos após apito do árbitro para sacar</li>
-      </ul>
-    </div>
-    <div class="rule-card">
-      <h3>🤸 O Líbero</h3>
-      <ul>
-        <li>Jogador especializado em defesa — usa colete de cor diferente</li>
-        <li>Não pode sacar, bloquear ou atacar acima da rede</li>
-        <li>Pode substituir qualquer jogador na zona de defesa sem contar nas substituições</li>
-        <li>Trocas do líbero só acontecem entre rallies</li>
-        <li>Se ele fizer toque (manchete) acima da rede, o ataque é inválido</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section-title" style="margin-top:32px;">🏆 Sistemas de Chaveamento</div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;">
-    <div class="card">
-      <div class="card-title">🔑 Chave de 3 Times</div>
-      <div style="font-size:0.85rem;color:var(--sand);line-height:1.8;margin-bottom:16px;">
-        <p><strong style="color:var(--amber);">Formato:</strong> Todos jogam contra todos (turno único).</p><br>
-        <p>• A vs B → vencedor + 1 ponto</p>
-        <p>• A vs C → vencedor + 1 ponto</p>
-        <p>• B vs C → vencedor + 1 ponto</p><br>
-        <p><strong style="color:var(--amber);">Classificação:</strong> Por vitórias → saldo de sets → saldo de pontos</p><br>
-        <p><strong style="color:var(--amber);">Critério de desempate:</strong></p>
-        <p>→ Confronto direto entre os empatados</p>
-        <p>→ Quociente de sets (sets ganhos ÷ sets perdidos)</p>
-        <p>→ Sorteio (último recurso)</p>
-      </div>
-      <div class="bracket-container">
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;">
-          <div style="background:rgba(232,160,32,0.1);border:1px solid rgba(232,192,96,0.3);border-radius:10px;padding:12px;font-size:0.8rem;">
-            <div style="color:var(--amber);font-weight:700;">1ª Rodada</div>
-            <div style="margin-top:8px;color:var(--sand);">A vs B</div>
-          </div>
-          <div style="background:rgba(232,160,32,0.1);border:1px solid rgba(232,192,96,0.3);border-radius:10px;padding:12px;font-size:0.8rem;">
-            <div style="color:var(--amber);font-weight:700;">2ª Rodada</div>
-            <div style="margin-top:8px;color:var(--sand);">A vs C</div>
-          </div>
-          <div style="background:rgba(232,160,32,0.1);border:1px solid rgba(232,192,96,0.3);border-radius:10px;padding:12px;font-size:0.8rem;">
-            <div style="color:var(--amber);font-weight:700;">3ª Rodada</div>
-            <div style="margin-top:8px;color:var(--sand);">B vs C</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">🔑 Chave de 4 Times</div>
-      <div style="font-size:0.85rem;color:var(--sand);line-height:1.8;margin-bottom:16px;">
-        <p><strong style="color:var(--amber);">Dois formatos comuns:</strong></p><br>
-        <p><strong>1) Round Robin (todos contra todos)</strong></p>
-        <p>6 jogos no total. Classificam os 2 primeiros para final.</p><br>
-        <p><strong>2) Fase de grupos + Eliminatória</strong></p>
-        <p>• 1ª fase: A vs B e C vs D</p>
-        <p>• Semifinal: 1ºA vs 2ºC e 1ºC vs 2ºA</p>
-        <p>• Final: vencedores se enfrentam</p><br>
-        <p><strong style="color:var(--amber);">Critério de desempate:</strong></p>
-        <p>→ Saldo de sets → Saldo de pontos → Confronto direto</p>
-      </div>
-      <div class="bracket-container">
-        <div class="bracket">
-          <div class="bracket-round">
-            <div class="bracket-title">SEMI</div>
-            <div class="bracket-match">
-              <div class="bracket-team">Time A <span class="score">—</span></div>
-              <div class="bracket-team">Time C <span class="score">—</span></div>
-            </div>
-            <div class="bracket-match">
-              <div class="bracket-team">Time B <span class="score">—</span></div>
-              <div class="bracket-team">Time D <span class="score">—</span></div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;color:var(--amber);font-size:1.5rem;">→</div>
-          <div class="bracket-round">
-            <div class="bracket-title">FINAL</div>
-            <div class="bracket-match">
-              <div class="bracket-team">? <span class="score">—</span></div>
-              <div class="bracket-team">? <span class="score">—</span></div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;color:var(--amber);font-size:1.5rem;">→</div>
-          <div class="bracket-round">
-            <div class="bracket-title">🏆</div>
-            <div class="bracket-match">
-              <div class="bracket-team winner">CAMPEÃO 🥇</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-title" style="margin-top:32px;">📋 Regulamentos Gerais de Torneio</div>
-  <div class="card">
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;">
-      <div>
-        <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">⏰ Warm-up e Atraso</div>
-        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">Aquecimento oficial: 6 min (3 min por equipe). Atraso permitido: até 15 minutos com W.O. automático após esse tempo.</p>
-      </div>
-      <div>
-        <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">⏸️ Tempos Técnicos</div>
-        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">2 tempos por set (30 seg cada) + paradas automáticas aos 8 e 16 pontos nos sets de 25.</p>
-      </div>
-      <div>
-        <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">👕 Uniformes</div>
-        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">Equipes devem usar uniformes numerados. Líbero deve ser visualmente diferenciado. Não é permitido jogar sem camisa.</p>
-      </div>
-      <div>
-        <div style="color:var(--amber);font-weight:700;margin-bottom:8px;font-size:0.9rem;">📝 Protesto</div>
-        <p style="font-size:0.82rem;color:var(--sand);line-height:1.6;">Capitão pode questionar a interpretação de regras ao árbitro imediatamente após o ponto. Não é cabível protesto por julgamento de fato.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════ TORNEIOS (ADMIN) ═══════════════════ -->
+<!-- ═══ TORNEIOS (ADMIN) ═══ -->
 <div id="tab-torneios" class="tab">
-  <div class="section-title">🏆 Gerenciar Torneios</div>
+  <div class="section-title">🏐 Gerenciar Torneios</div>
   <div class="card">
     <div class="card-title">➕ Criar Torneio</div>
     <div class="form-grid">
-      <div class="form-group">
-        <label>Nome do Torneio</label>
-        <input id="tNome" type="text" placeholder="Ex: Copa VolêiBros 2025">
-      </div>
-      <div class="form-group">
-        <label>Data</label>
-        <input id="tData" type="date">
-      </div>
-      <div class="form-group">
-        <label>Local</label>
-        <input id="tLocal" type="text" placeholder="Local do torneio">
-      </div>
-      <div class="form-group">
-        <label>Formato</label>
-        <select id="tFormato">
-          <option value="chave3">Chave de 3 times</option>
-          <option value="chave4">Chave de 4 times</option>
-          <option value="dupla">Torneio de Duplas</option>
-          <option value="livre">Formato livre</option>
-        </select>
+      <div class="form-group"><label>Nome do Torneio</label><input id="tNome" type="text" placeholder="Ex: Copa VolêiBros 2025"></div>
+      <div class="form-group"><label>Data</label><input id="tData" type="date"></div>
+      <div class="form-group"><label>Local</label><input id="tLocal" type="text" placeholder="Local do torneio"></div>
+      <div class="form-group"><label>Formato</label>
+        <select id="tFormato"><option value="chave3">Chave de 3 times</option><option value="chave4">Chave de 4 times</option><option value="dupla">Torneio de Duplas</option><option value="livre">Formato livre</option></select>
       </div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-primary" onclick="addTorneio()">✅ Criar Torneio</button>
-    </div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="addTorneio()">✅ Criar Torneio</button></div>
   </div>
-  <div class="section-title">📋 Torneios Cadastrados</div>
-  <div id="torneioList">
-    <div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum torneio criado ainda 🏆</div>
+  <div class="section-title">📋 Torneios</div>
+  <div id="torneioList"><div style="text-align:center;padding:48px;color:var(--gray-m);">Nenhum torneio criado ainda 🏆</div></div>
+</div>
+
+<!-- ═══ CONFIG (ADMIN) ═══ -->
+<div id="tab-config" class="tab">
+  <div class="section-title">⚙️ Configurações do Time</div>
+  <div class="card">
+    <div class="card-title">📸 Foto da Equipe</div>
+    <img id="configTeamPhotoPreview" class="photo-preview-rect" alt="Foto da equipe" style="display:none;">
+    <div class="form-group"><label>Upload da foto principal</label><input id="configTeamPhoto" type="file" accept="image/*" onchange="previewTeamPhoto(this)"></div>
+    <div class="btn-row"><button class="btn btn-primary btn-sm" onclick="saveTeamPhoto()">💾 Salvar Foto</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">📝 Informações do Time</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Nome do Time</label><input id="configNome" type="text" placeholder="VolêiBros"></div>
+      <div class="form-group"><label>Tagline</label><input id="configTagline" type="text" placeholder="Time de Elite · Camocim, CE"></div>
+      <div class="form-group"><label>Instagram</label><input id="configInsta" type="text" placeholder="@voleibros"></div>
+      <div class="form-group"><label>Cidade</label><input id="configCidade" type="text" placeholder="Camocim, CE"></div>
+    </div>
+    <div class="form-group" style="margin-top:14px;"><label>Descrição / Apresentação</label><textarea id="configDesc" placeholder="Apresentação do time para o público..."></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveTeamInfo()">💾 Salvar Informações</button></div>
+  </div>
+  <div class="card">
+    <div class="card-title">🔑 Alterar Senha de Admin</div>
+    <div class="form-grid">
+      <div class="form-group"><label>Senha Atual</label><input id="curPass" type="password" placeholder="Senha atual"></div>
+      <div class="form-group"><label>Nova Senha</label><input id="newPass" type="password" placeholder="Nova senha (mín. 4 caracteres)"></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-success btn-sm" onclick="changePassword()">💾 Salvar Nova Senha</button></div>
   </div>
 </div>
 
 </main>
 
-<!-- ─── MODAL DETALHES EVENTO ─── -->
+<!-- MODAL DETALHES EVENTO -->
 <div class="modal-overlay" id="eventModal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('eventModal')">✕</button>
     <h2 id="modalTitle">Evento</h2>
     <div id="modalContent"></div>
     <div class="btn-row" style="margin-top:20px;">
-      <button class="btn btn-whatsapp" onclick="sendWhatsapp()">📲 Enviar WhatsApp p/ Todos</button>
-      <button class="btn btn-google" onclick="addGoogleCalendar()">📅 Adicionar ao Google Agenda</button>
+      <button class="btn btn-whatsapp" onclick="sendWhatsapp()">📲 WhatsApp p/ Todos</button>
+      <button class="btn btn-google" onclick="addGoogleCalendar()">📅 Google Agenda</button>
     </div>
   </div>
 </div>
 
-<!-- ─── MODAL LOGIN ADMIN ─── -->
+<!-- MODAL LOGIN ADMIN -->
 <div class="modal-overlay" id="adminLoginModal">
   <div class="modal login-modal">
     <button class="modal-close" onclick="closeModal('adminLoginModal')">✕</button>
     <div class="lock-icon">🔐</div>
-    <h2 style="text-align:center;">Área Admin</h2>
+    <h2 style="text-align:center;letter-spacing:3px;">Área Admin</h2>
     <div class="form-group" style="margin-bottom:14px;">
       <label>Senha</label>
       <div class="pass-container">
@@ -1269,19 +827,6 @@
       <button class="btn btn-primary" style="width:100%;" onclick="login()">🔓 Entrar</button>
     </div>
     <p class="login-hint">Senha padrão: <strong>admin123</strong></p>
-    <hr style="border-color:rgba(255,255,255,0.1);margin:20px 0;">
-    <div id="changePassSection">
-      <div class="card-title" style="font-size:0.85rem;margin-bottom:12px;">🔑 Alterar Senha (se já logado)</div>
-      <div class="form-group" style="margin-bottom:8px;">
-        <label>Senha Atual</label>
-        <input id="curPassInput" type="password" placeholder="Senha atual">
-      </div>
-      <div class="form-group" style="margin-bottom:8px;">
-        <label>Nova Senha</label>
-        <input id="newPassInput" type="password" placeholder="Nova senha">
-      </div>
-      <button class="btn btn-success btn-sm" onclick="changePassword()">💾 Salvar Nova Senha</button>
-    </div>
   </div>
 </div>
 
@@ -1290,24 +835,52 @@
 
 <script>
 // ─── STATE ───
-let players  = JSON.parse(localStorage.getItem('vb_players')  || '[]');
-let events   = JSON.parse(localStorage.getItem('vb_events')   || '[]');
-let torneios = JSON.parse(localStorage.getItem('vb_torneios') || '[]');
+let players      = JSON.parse(localStorage.getItem('vb_players')      || '[]');
+let events       = JSON.parse(localStorage.getItem('vb_events')       || '[]');
+let torneios     = JSON.parse(localStorage.getItem('vb_torneios')     || '[]');
+let conquistas   = JSON.parse(localStorage.getItem('vb_conquistas')   || '[]');
+let teamInfo     = JSON.parse(localStorage.getItem('vb_team_info')    || JSON.stringify({
+  nome:'VolêiBros', tagline:'Time de Elite · Camocim, CE', descricao:'', instagram:'', cidade:'Camocim, CE'
+}));
 let selectedParticipants = [];
 let currentEvent = null;
-
-// ─── ADMIN ───
-const DEFAULT_ADMIN_PASS = 'admin123';
-function getAdminPass() {
-  return localStorage.getItem('vb_admin_pass') || DEFAULT_ADMIN_PASS;
-}
-// Persiste sessão admin na sessionStorage (limpa ao fechar browser)
 let isAdmin = sessionStorage.getItem('vb_admin') === 'yes';
+
+// ─── SAVE ───
+function save() {
+  try {
+    localStorage.setItem('vb_players',    JSON.stringify(players));
+    localStorage.setItem('vb_events',     JSON.stringify(events));
+    localStorage.setItem('vb_torneios',   JSON.stringify(torneios));
+    localStorage.setItem('vb_conquistas', JSON.stringify(conquistas));
+    localStorage.setItem('vb_team_info',  JSON.stringify(teamInfo));
+  } catch(e) { toast('⚠️ Armazenamento cheio! Reduza o tamanho das fotos.','error'); }
+}
+
+// ─── COMPRESS IMAGE ───
+function compressImage(file, cb) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 480;
+      let w = img.width, h = img.height;
+      if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
+      const c = document.createElement('canvas');
+      c.width = w; c.height = h;
+      c.getContext('2d').drawImage(img, 0, 0, w, h);
+      cb(c.toDataURL('image/jpeg', 0.6));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ─── ADMIN AUTH ───
+function getAdminPass() { return localStorage.getItem('vb_admin_pass') || 'admin123'; }
 
 function openAdminLogin() {
   document.getElementById('adminPassInput').value = '';
-  document.getElementById('curPassInput').value = '';
-  document.getElementById('newPassInput').value = '';
   document.getElementById('adminLoginModal').classList.add('open');
   setTimeout(() => document.getElementById('adminPassInput').focus(), 200);
 }
@@ -1315,50 +888,38 @@ function openAdminLogin() {
 function login() {
   const pass = document.getElementById('adminPassInput').value;
   if (pass === getAdminPass()) {
-    isAdmin = true;
-    sessionStorage.setItem('vb_admin', 'yes');
-    closeModal('adminLoginModal');
-    applyAdminState();
-    showTabByName('agenda');
+    isAdmin = true; sessionStorage.setItem('vb_admin','yes');
+    closeModal('adminLoginModal'); applyAdminState(); showTabByName('agenda');
     toast('👑 Bem-vindo, Admin!');
-  } else {
-    toast('❌ Senha incorreta!', 'error');
-    document.getElementById('adminPassInput').select();
-  }
+  } else { toast('❌ Senha incorreta!','error'); }
 }
 
 function logout() {
-  isAdmin = false;
-  sessionStorage.removeItem('vb_admin');
-  applyAdminState();
-  showTabByName('eventos');
-  toast('🔒 Sessão admin encerrada');
+  isAdmin = false; sessionStorage.removeItem('vb_admin');
+  applyAdminState(); showTabByName('quem-somos');
+  toast('🔒 Sessão encerrada');
 }
 
 function changePassword() {
-  const cur = document.getElementById('curPassInput').value;
-  const novo = document.getElementById('newPassInput').value.trim();
-  if (cur !== getAdminPass()) { toast('Senha atual incorreta!', 'error'); return; }
-  if (novo.length < 4) { toast('Nova senha muito curta (mín. 4 caracteres)!', 'error'); return; }
-  localStorage.setItem('vb_admin_pass', novo);
-  document.getElementById('curPassInput').value = '';
-  document.getElementById('newPassInput').value = '';
-  toast('✅ Senha alterada com sucesso!');
+  const cur = document.getElementById('curPass').value;
+  const nv  = document.getElementById('newPass').value.trim();
+  if (cur !== getAdminPass()) { toast('Senha atual incorreta!','error'); return; }
+  if (nv.length < 4) { toast('Nova senha muito curta!','error'); return; }
+  localStorage.setItem('vb_admin_pass', nv);
+  document.getElementById('curPass').value = ''; document.getElementById('newPass').value = '';
+  toast('✅ Senha alterada!');
 }
 
 function togglePassVis() {
-  const inp = document.getElementById('adminPassInput');
-  inp.type = inp.type === 'password' ? 'text' : 'password';
+  const i = document.getElementById('adminPassInput');
+  i.type = i.type === 'password' ? 'text' : 'password';
 }
 
 function applyAdminState() {
-  if (isAdmin) {
-    document.body.classList.add('is-admin');
-    document.getElementById('subtitleText').textContent = 'Agenda · Treinos · Torneios · Regras';
-  } else {
-    document.body.classList.remove('is-admin');
-    document.getElementById('subtitleText').textContent = 'Treinos · Regras · Próximos Eventos';
-  }
+  document.body.classList.toggle('is-admin', isAdmin);
+  document.getElementById('subtitleText').textContent = isAdmin
+    ? 'Agenda · Atletas · Conquistas · Torneios'
+    : (teamInfo.tagline || 'Time de Elite · Camocim, CE');
 }
 
 // ─── TABS ───
@@ -1368,129 +929,188 @@ function showTab(name, btn) {
   const el = document.getElementById('tab-' + name);
   if (el) el.classList.add('active');
   if (btn) btn.classList.add('active');
+  if (name === 'config') loadConfigForm();
   renderAll();
 }
-
 function showTabByName(name) {
-  // Find button for this tab name and simulate click
-  const allBtns = document.querySelectorAll('nav button');
+  const btns = document.querySelectorAll('nav button');
   let found = null;
-  allBtns.forEach(b => {
-    const oc = b.getAttribute('onclick') || '';
-    if (oc.includes("'" + name + "'")) found = b;
-  });
+  btns.forEach(b => { if ((b.getAttribute('onclick')||'').includes("'"+name+"'")) found = b; });
   showTab(name, found);
 }
 
 // ─── TOAST ───
 function toast(msg, type='success') {
   const t = document.getElementById('toast');
-  t.style.background = type === 'error' ? '#e74c3c' : '#27ae60';
+  t.style.background = type === 'error' ? '#c0392b' : '#27ae60';
   document.getElementById('toastMsg').textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-// ─── SAVE ───
-function save() {
-  localStorage.setItem('vb_players',  JSON.stringify(players));
-  localStorage.setItem('vb_events',   JSON.stringify(events));
-  localStorage.setItem('vb_torneios', JSON.stringify(torneios));
+// ─── TEAM CONFIG ───
+function loadConfigForm() {
+  document.getElementById('configNome').value    = teamInfo.nome    || '';
+  document.getElementById('configTagline').value = teamInfo.tagline || '';
+  document.getElementById('configInsta').value   = teamInfo.instagram || '';
+  document.getElementById('configCidade').value  = teamInfo.cidade  || '';
+  document.getElementById('configDesc').value    = teamInfo.descricao || '';
+  const photo = localStorage.getItem('vb_team_photo');
+  const prev = document.getElementById('configTeamPhotoPreview');
+  if (photo) { prev.src = photo; prev.style.display = 'block'; }
+  else { prev.style.display = 'none'; }
+}
+
+function previewTeamPhoto(inp) {
+  if (!inp.files[0]) return;
+  compressImage(inp.files[0], b64 => {
+    const prev = document.getElementById('configTeamPhotoPreview');
+    prev.src = b64; prev.style.display = 'block';
+  });
+}
+
+function saveTeamPhoto() {
+  const inp = document.getElementById('configTeamPhoto');
+  if (!inp.files[0]) { toast('Selecione uma foto!','error'); return; }
+  compressImage(inp.files[0], b64 => {
+    try { localStorage.setItem('vb_team_photo', b64); renderHero(); toast('📸 Foto salva!'); }
+    catch(e) { toast('Foto muito grande! Tente uma menor.','error'); }
+  });
+}
+
+function saveTeamInfo() {
+  teamInfo.nome      = document.getElementById('configNome').value.trim()    || 'VolêiBros';
+  teamInfo.tagline   = document.getElementById('configTagline').value.trim() || '';
+  teamInfo.instagram = document.getElementById('configInsta').value.trim()   || '';
+  teamInfo.cidade    = document.getElementById('configCidade').value.trim()   || '';
+  teamInfo.descricao = document.getElementById('configDesc').value.trim()    || '';
+  save(); renderHero(); applyAdminState();
+  toast('✅ Informações salvas!');
+}
+
+function renderHero() {
+  const photo = localStorage.getItem('vb_team_photo');
+  const img   = document.getElementById('heroImg');
+  const ph    = document.getElementById('heroPlaceholder');
+  if (photo) { img.src = photo; img.style.display = 'block'; ph.style.display = 'none'; }
+  else       { img.style.display = 'none'; ph.style.display = 'flex'; }
+  document.getElementById('heroNome').textContent    = teamInfo.nome    || 'VolêiBros';
+  document.getElementById('heroTagline').textContent = teamInfo.tagline || 'Time de Elite · Camocim, CE';
+  const descCard = document.getElementById('heroDescCard');
+  const descEl   = document.getElementById('heroDesc');
+  if (teamInfo.descricao) { descEl.textContent = teamInfo.descricao; descCard.style.display = 'block'; }
+  else { descCard.style.display = 'none'; }
 }
 
 // ─── PLAYERS ───
 function addPlayer() {
   const nome     = document.getElementById('pNome').value.trim();
   const apelido  = document.getElementById('pApelido').value.trim();
-  const whatsapp = document.getElementById('pWhatsapp').value.trim();
+  const numero   = document.getElementById('pNumero').value.trim();
   const posicao  = document.getElementById('pPosicao').value;
-  if (!nome || !whatsapp) { toast('Preencha nome e WhatsApp!', 'error'); return; }
-  players.push({ id: Date.now(), nome, apelido: apelido || nome, whatsapp, posicao });
-  save(); renderAll();
-  document.getElementById('pNome').value = '';
-  document.getElementById('pApelido').value = '';
-  document.getElementById('pWhatsapp').value = '';
-  toast('Jogador cadastrado! 🏐');
+  const whatsapp = document.getElementById('pWhatsapp').value.replace(/\D/g,'');
+  const bio      = document.getElementById('pBio').value.trim();
+  const fotoInp  = document.getElementById('pFoto');
+  if (!nome) { toast('Informe o nome do atleta!','error'); return; }
+
+  const doSave = (photo) => {
+    players.push({ id:Date.now(), nome, apelido, numero, posicao, whatsapp, bio, photo });
+    save(); renderPlayers(); renderPublicPlayers(); renderMultiselect();
+    document.getElementById('pNome').value=''; document.getElementById('pApelido').value='';
+    document.getElementById('pNumero').value=''; document.getElementById('pWhatsapp').value='';
+    document.getElementById('pBio').value=''; fotoInp.value='';
+    toast('✅ Atleta cadastrado!');
+  };
+  if (fotoInp.files[0]) compressImage(fotoInp.files[0], doSave);
+  else doSave('');
+}
+
+function removePlayer(id) {
+  players = players.filter(p => p.id !== id);
+  save(); renderPlayers(); renderPublicPlayers(); renderMultiselect();
+  toast('Atleta removido');
+}
+
+function buildPlayerCard(p, showAdmin) {
+  const initials = (p.apelido || p.nome || '?')[0].toUpperCase();
+  const avatarInner = p.photo
+    ? `<img src="${p.photo}" alt="${p.apelido}">`
+    : initials;
+  const adminBtns = showAdmin
+    ? `<div style="display:flex;gap:6px;justify-content:center;margin-top:10px;">
+         <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removePlayer(${p.id})">✕ Remover</button>
+         <a href="https://wa.me/55${p.whatsapp}" target="_blank" class="btn btn-whatsapp btn-sm">📲</a>
+       </div>` : '';
+  return `
+  <div class="player-card">
+    ${p.numero ? `<div class="player-num">#${p.numero}</div>` : ''}
+    <div class="player-avatar">${avatarInner}</div>
+    <div class="apelido">${p.apelido || p.nome}</div>
+    <h4>${p.nome}</h4>
+    <p>${p.posicao}</p>
+    ${p.bio ? `<p class="bio">${p.bio}</p>` : ''}
+    ${showAdmin && p.whatsapp ? `<p class="whatsapp">📱 ${formatPhone(p.whatsapp)}</p>` : ''}
+    ${adminBtns}
+  </div>`;
 }
 
 function renderPlayers() {
   const grid = document.getElementById('playerGrid');
   if (!grid) return;
-  if (!players.length) {
-    grid.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;grid-column:1/-1;">Nenhum jogador cadastrado ainda 🏐</div>';
-    return;
-  }
-  grid.innerHTML = players.map(p => `
-    <div class="player-card">
-      <div class="player-avatar">${p.apelido[0].toUpperCase()}</div>
-      <h4>${p.apelido}</h4>
-      <p style="color:var(--gray);font-size:0.8rem;">${p.nome}</p>
-      <p style="color:var(--sky);font-size:0.75rem;margin-top:4px;">📍 ${p.posicao}</p>
-      <p class="whatsapp">📱 ${formatPhone(p.whatsapp)}</p>
-      <div style="margin-top:10px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;">
-        <a href="https://wa.me/55${p.whatsapp}" target="_blank" class="btn btn-whatsapp btn-sm" style="text-decoration:none;display:inline-block;">💬 Chamar</a>
-        <button class="btn btn-danger btn-sm" onclick="removePlayer(${p.id})">✕</button>
-      </div>
-    </div>
-  `).join('');
+  if (!players.length) { grid.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray-m);grid-column:1/-1;">Nenhum atleta cadastrado ainda 🏐</div>'; return; }
+  grid.innerHTML = players.map(p => buildPlayerCard(p, true)).join('');
 }
 
-function removePlayer(id) {
-  players = players.filter(p => p.id !== id);
-  save(); renderAll();
-  toast('Jogador removido');
+function renderPublicPlayers() {
+  const grid = document.getElementById('publicPlayerGrid');
+  if (!grid) return;
+  if (!players.length) { grid.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray-m);grid-column:1/-1;">Atletas serão exibidos aqui pelo admin. 🏐</div>'; return; }
+  grid.innerHTML = players.map(p => buildPlayerCard(p, false)).join('');
 }
 
-function formatPhone(num) {
-  const n = num.replace(/\D/g,'');
-  if (n.length >= 11) return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`;
-  return num;
+function formatPhone(w) {
+  if (!w) return '';
+  const n = w.replace(/\D/g,'');
+  if (n.length === 11) return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`;
+  return w;
 }
 
 // ─── MULTISELECT ───
+let msOpen = false;
 function toggleMultiselect() {
-  document.getElementById('participantesContainer').classList.toggle('open');
+  const c = document.getElementById('participantesContainer');
+  msOpen = !msOpen; c.classList.toggle('open', msOpen);
 }
-
+document.addEventListener('click', e => {
+  const c = document.getElementById('participantesContainer');
+  if (c && !c.contains(e.target)) { msOpen = false; c.classList.remove('open'); }
+});
 function renderMultiselect() {
   const dd = document.getElementById('participantesDropdown');
   if (!dd) return;
+  if (!players.length) { dd.innerHTML = '<div style="padding:12px;color:var(--gray-m);font-size:0.82rem;">Cadastre atletas primeiro</div>'; return; }
   dd.innerHTML = players.map(p => `
     <label class="multiselect-option">
-      <input type="checkbox" value="${p.id}" onchange="toggleParticipant(${p.id})"
-        ${selectedParticipants.includes(p.id) ? 'checked' : ''}>
-      ${p.apelido} (${p.posicao})
-    </label>
-  `).join('') || '<div style="padding:10px 14px;color:var(--gray);font-size:0.8rem;">Nenhum jogador cadastrado</div>';
+      <input type="checkbox" value="${p.id}" ${selectedParticipants.includes(p.id)?'checked':''} onchange="toggleParticipant(${p.id})">
+      ${p.apelido || p.nome} (${p.posicao})
+    </label>`).join('');
+  renderTags();
 }
-
 function toggleParticipant(id) {
-  if (selectedParticipants.includes(id)) {
-    selectedParticipants = selectedParticipants.filter(x => x !== id);
-  } else {
-    selectedParticipants.push(id);
-  }
-  renderSelectedTags();
+  const idx = selectedParticipants.indexOf(id);
+  if (idx === -1) selectedParticipants.push(id); else selectedParticipants.splice(idx,1);
+  renderTags();
 }
-
-function renderSelectedTags() {
+function renderTags() {
   const tags = document.getElementById('selectedTags');
   if (!tags) return;
   tags.innerHTML = selectedParticipants.map(id => {
     const p = players.find(x => x.id === id);
-    return p ? `<div class="tag" onclick="toggleParticipant(${id})">${p.apelido} <span>✕</span></div>` : '';
+    return p ? `<div class="tag" onclick="toggleParticipant(${id});renderMultiselect();">${p.apelido||p.nome} <span>✕</span></div>` : '';
   }).join('');
 }
 
-// click outside multiselect
-document.addEventListener('click', e => {
-  const mc = document.getElementById('participantesContainer');
-  if (mc && !mc.contains(e.target)) mc.classList.remove('open');
-});
-
 // ─── EVENTS ───
-function updateEvForm() {}
-
 function addEvent() {
   const tipo      = document.getElementById('evTipo').value;
   const nome      = document.getElementById('evNome').value.trim();
@@ -1499,199 +1119,193 @@ function addEvent() {
   const local     = document.getElementById('evLocal').value.trim();
   const modalidade= document.getElementById('evModalidade').value;
   const obs       = document.getElementById('evObs').value.trim();
-  if (!nome || !data) { toast('Preencha nome e data!', 'error'); return; }
-  const ev = { id: Date.now(), tipo, nome, data, hora, local, modalidade, obs, participantes: [...selectedParticipants] };
-  events.push(ev);
+  if (!nome || !data) { toast('Preencha nome e data!','error'); return; }
+  events.push({ id:Date.now(), tipo, nome, data, hora, local, modalidade, obs, participantes:[...selectedParticipants] });
   selectedParticipants = [];
-  renderSelectedTags();
-  save(); renderAll();
-  document.getElementById('evNome').value  = '';
-  document.getElementById('evData').value  = '';
-  document.getElementById('evHora').value  = '';
-  document.getElementById('evLocal').value = '';
-  document.getElementById('evObs').value   = '';
-  toast('Evento adicionado! 📅');
+  save(); renderEvents(); renderPublicEvents(); renderStats(); renderMultiselect();
+  document.getElementById('evNome').value=''; document.getElementById('evHora').value='';
+  document.getElementById('evLocal').value=''; document.getElementById('evObs').value='';
+  toast('✅ Evento adicionado!');
 }
 
-function buildEventHTML(ev, showActions) {
-  const dt = new Date(ev.data + 'T00:00:00');
-  const d  = dt.getDate().toString().padStart(2,'0');
-  const m  = dt.toLocaleString('pt-BR',{month:'short'}).toUpperCase();
-  const parts = ev.participantes.map(id => players.find(p => p.id === id)?.apelido || '').filter(Boolean);
+function buildEventHTML(ev, showAdmin) {
+  const dt = new Date(ev.data+'T00:00:00');
   const today = new Date(); today.setHours(0,0,0,0);
   const isPast = dt < today;
-  const classNames = ['event-item', isPast ? 'event-past' : 'event-upcoming'].join(' ');
-  const actionsHTML = showActions ? `
+  const d = dt.toLocaleDateString('pt-BR',{day:'2-digit'});
+  const m = dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','').toUpperCase();
+  const parts = (ev.participantes||[]).map(pid => players.find(p => p.id === pid)).filter(Boolean);
+  const cls = ['event-item', isPast?'event-past':'event-upcoming'].join(' ');
+  const adminActions = showAdmin ? `
     <div class="event-actions">
       <button class="btn btn-whatsapp btn-sm" onclick="event.stopPropagation();sendWhatsappEvent(${ev.id})">📲 WhatsApp</button>
       <button class="btn btn-google btn-sm" onclick="event.stopPropagation();addGCalEvent(${ev.id})">📅 Google</button>
       <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeEvent(${ev.id})">✕</button>
     </div>` : '';
   return `
-    <div class="${classNames}" onclick="openEvent(${ev.id})">
-      <div class="event-date-box">
-        <div class="day">${d}</div>
-        <div class="month">${m}</div>
-      </div>
-      <div class="event-info">
-        <div style="margin-bottom:6px;"><span class="badge badge-${ev.tipo}">${ev.tipo}</span>${isPast ? ' <span style="font-size:0.7rem;color:var(--gray);">(passado)</span>' : ''}</div>
-        <h3>${ev.nome}</h3>
-        <p>🕐 ${ev.hora || '—'} &nbsp;|&nbsp; 📍 ${ev.local || '—'} &nbsp;|&nbsp; 🏐 ${ev.modalidade || '—'}</p>
-        ${parts.length ? `<p>👥 ${parts.join(', ')}</p>` : ''}
-        ${ev.obs ? `<p style="color:var(--gray);font-style:italic;">${ev.obs}</p>` : ''}
-        ${actionsHTML}
-      </div>
-    </div>`;
+  <div class="${cls}" onclick="openEvent(${ev.id})">
+    <div class="event-date-box"><div class="day">${d}</div><div class="month">${m}</div></div>
+    <div class="event-info">
+      <div style="margin-bottom:6px;"><span class="badge badge-${ev.tipo}">${ev.tipo}</span>${isPast?' <span style="font-size:0.7rem;color:var(--gray-m);">(passado)</span>':''}</div>
+      <h3>${ev.nome}</h3>
+      <p>🕐 ${ev.hora||'—'} &nbsp;|&nbsp; 📍 ${ev.local||'—'} &nbsp;|&nbsp; 🏐 ${ev.modalidade||'—'}</p>
+      ${parts.length ? `<p>👥 ${parts.map(p=>p.apelido||p.nome).join(', ')}</p>` : ''}
+      ${ev.obs ? `<p style="color:var(--gray-m);font-style:italic;">${ev.obs}</p>` : ''}
+      ${adminActions}
+    </div>
+  </div>`;
 }
 
 function renderEvents() {
-  const list = document.getElementById('eventList');
-  if (!list) return;
+  const list = document.getElementById('eventList'); if (!list) return;
   const sorted = [...events].sort((a,b) => a.data.localeCompare(b.data));
-  if (!sorted.length) {
-    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum evento cadastrado ainda. Adicione um acima! 🏐</div>';
-    return;
-  }
-  list.innerHTML = sorted.map(ev => buildEventHTML(ev, true)).join('');
+  list.innerHTML = sorted.length ? sorted.map(ev => buildEventHTML(ev,true)).join('')
+    : '<div style="text-align:center;padding:48px;color:var(--gray-m);">Nenhum evento cadastrado ainda. 🏐</div>';
 }
 
 function renderPublicEvents() {
-  const list = document.getElementById('publicEventList');
-  if (!list) return;
-  const today = new Date(); today.setHours(0,0,0,0);
+  const list = document.getElementById('publicEventList'); if (!list) return;
   const sorted = [...events].sort((a,b) => a.data.localeCompare(b.data));
-  if (!sorted.length) {
-    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum evento cadastrado ainda. 🏐</div>';
-    return;
-  }
-  list.innerHTML = sorted.map(ev => buildEventHTML(ev, false)).join('');
+  list.innerHTML = sorted.length ? sorted.map(ev => buildEventHTML(ev,false)).join('')
+    : '<div style="text-align:center;padding:48px;color:var(--gray-m);">Nenhum evento cadastrado ainda. 🏐</div>';
 }
 
-function removeEvent(id) {
-  events = events.filter(e => e.id !== id);
-  save(); renderAll();
-  toast('Evento removido');
-}
+function removeEvent(id) { events = events.filter(e => e.id !== id); save(); renderAll(); toast('Evento removido'); }
 
 function openEvent(id) {
-  currentEvent = events.find(e => e.id === id);
-  if (!currentEvent) return;
-  const parts = currentEvent.participantes.map(pid => players.find(p => p.id === pid)).filter(Boolean);
+  currentEvent = events.find(e => e.id === id); if (!currentEvent) return;
+  const parts = (currentEvent.participantes||[]).map(pid => players.find(p=>p.id===pid)).filter(Boolean);
   document.getElementById('modalTitle').textContent = currentEvent.nome;
   document.getElementById('modalContent').innerHTML = `
     <p><strong>Tipo:</strong> ${currentEvent.tipo} | <strong>Modalidade:</strong> ${currentEvent.modalidade}</p>
     <p><strong>Data:</strong> ${new Date(currentEvent.data+'T00:00:00').toLocaleDateString('pt-BR')}</p>
-    <p><strong>Horário:</strong> ${currentEvent.hora || '—'}</p>
-    <p><strong>Local:</strong> ${currentEvent.local || '—'}</p>
-    <p><strong>Participantes:</strong></p>
-    ${parts.length ? parts.map(p => `<div style="padding:6px;background:rgba(255,255,255,0.05);border-radius:8px;margin:4px 0;font-size:0.85rem;">🏐 ${p.apelido} — ${p.nome} — 📱 ${formatPhone(p.whatsapp)}</div>`).join('') : '<p style="color:var(--gray);">Nenhum participante selecionado</p>'}
-    ${currentEvent.obs ? `<p style="margin-top:12px;color:var(--sand);"><em>${currentEvent.obs}</em></p>` : ''}
+    <p><strong>Horário:</strong> ${currentEvent.hora||'—'}</p>
+    <p><strong>Local:</strong> ${currentEvent.local||'—'}</p>
+    ${parts.length ? `<p><strong>Participantes:</strong></p>${parts.map(p=>`<div style="padding:6px;background:rgba(255,255,255,0.04);border-radius:8px;margin:4px 0;font-size:0.85rem;">🏐 ${p.apelido||p.nome} — ${p.posicao}</div>`).join('')}` : ''}
+    ${currentEvent.obs ? `<p style="margin-top:12px;color:var(--cream);font-style:italic;">${currentEvent.obs}</p>` : ''}
   `;
   document.getElementById('eventModal').classList.add('open');
 }
 
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-// Close modals on overlay click
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('open');
-  });
-});
+document.querySelectorAll('.modal-overlay').forEach(o => { o.addEventListener('click', function(e){ if(e.target===this) this.classList.remove('open'); }); });
 
 // ─── WHATSAPP ───
 function buildMsg(ev) {
-  const dt = new Date(ev.data + 'T00:00:00').toLocaleDateString('pt-BR');
-  const tipoEmoji = { jogo:'🏐', torneio:'🏆', treino:'💪' };
-  return `${tipoEmoji[ev.tipo]||'🏐'} *VolêiBros — ${ev.tipo.toUpperCase()}*\n\n📌 *${ev.nome}*\n📅 Data: ${dt}\n🕐 Horário: ${ev.hora||'—'}\n📍 Local: ${ev.local||'—'}\n🏐 Modalidade: ${ev.modalidade||'—'}\n\n${ev.obs?'📝 '+ev.obs+'\n\n':''}Contando com a presença de todos! 💪🏐`;
+  const dt = new Date(ev.data+'T00:00:00').toLocaleDateString('pt-BR');
+  const em = {jogo:'🏐',torneio:'🏆',treino:'💪'};
+  return `${em[ev.tipo]||'🏐'} *VolêiBros — ${ev.tipo.toUpperCase()}*\n\n📌 *${ev.nome}*\n📅 ${dt}\n🕐 ${ev.hora||'—'}\n📍 ${ev.local||'—'}\n🏐 ${ev.modalidade||'—'}\n\n${ev.obs?'📝 '+ev.obs+'\n\n':''}Contando com todos! 💪🏐`;
 }
-
 function sendWhatsappEvent(id) {
-  const ev = events.find(e => e.id === id);
-  if (!ev) return;
-  const parts = ev.participantes.map(pid => players.find(p => p.id === pid)).filter(Boolean);
-  if (!parts.length) { toast('Nenhum participante neste evento!', 'error'); return; }
+  const ev = events.find(e => e.id === id); if (!ev) return;
+  const parts = (ev.participantes||[]).map(pid => players.find(p=>p.id===pid)).filter(Boolean);
+  if (!parts.length) { toast('Nenhum participante!','error'); return; }
   const msg = buildMsg(ev);
-  parts.forEach(p => window.open(`https://wa.me/55${p.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank'));
+  parts.forEach(p => window.open(`https://wa.me/55${p.whatsapp}?text=${encodeURIComponent(msg)}`,'_blank'));
   toast(`📲 WhatsApp aberto para ${parts.length} participante(s)!`);
 }
-
-function sendWhatsapp() {
-  if (!currentEvent) return;
-  sendWhatsappEvent(currentEvent.id);
-}
-
+function sendWhatsapp() { if (currentEvent) sendWhatsappEvent(currentEvent.id); }
 function notifyAll() {
-  if (!events.length) { toast('Nenhum evento cadastrado!', 'error'); return; }
-  const upcoming = [...events].sort((a,b) => a.data.localeCompare(b.data))[0];
-  sendWhatsappEvent(upcoming.id);
+  if (!events.length) { toast('Nenhum evento!','error'); return; }
+  const up = [...events].sort((a,b)=>a.data.localeCompare(b.data))[0];
+  sendWhatsappEvent(up.id);
 }
 
 // ─── GOOGLE CALENDAR ───
 function addGCalEvent(id) {
-  const ev = events.find(e => e.id === id);
-  if (!ev) return;
-  const parts = ev.participantes.map(pid => players.find(p => p.id === pid)).filter(Boolean);
-  const dt    = ev.data.replace(/-/g,'');
-  const hora  = ev.hora ? ev.hora.replace(':','') : '1900';
-  const start = dt + 'T' + hora + '00';
-  const h     = parseInt(hora.slice(0,2));
-  const endH  = (h+2).toString().padStart(2,'0') + hora.slice(2);
-  const end   = dt + 'T' + endH + '00';
-  const noticeList = parts.length ? `\nParticipantes: ${parts.map(p=>p.apelido).join(', ')}` : '';
-  const details = `Evento: ${ev.tipo} — ${ev.modalidade}\nLocal: ${ev.local||'—'}${noticeList}${ev.obs?'\n'+ev.obs:''}`;
-  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.nome)}&dates=${start}/${end}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(ev.local||'')}`;
-  window.open(url, '_blank');
+  const ev = events.find(e=>e.id===id); if (!ev) return;
+  const parts = (ev.participantes||[]).map(pid=>players.find(p=>p.id===pid)).filter(Boolean);
+  const dt = ev.data.replace(/-/g,'');
+  const h = ev.hora ? ev.hora.replace(':','') : '1900';
+  const start = dt+'T'+h+'00';
+  const eH = (parseInt(h.slice(0,2))+2).toString().padStart(2,'0')+h.slice(2);
+  const end = dt+'T'+eH+'00';
+  const details = `${ev.tipo} — ${ev.modalidade}\nLocal: ${ev.local||'—'}${parts.length?'\nParticipantes: '+parts.map(p=>p.apelido||p.nome).join(', '):''}${ev.obs?'\n'+ev.obs:''}`;
+  window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(ev.nome)}&dates=${start}/${end}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(ev.local||'')}`, '_blank');
   toast('📅 Google Agenda aberto!');
 }
-
-function addGoogleCalendar() {
-  if (!currentEvent) return;
-  addGCalEvent(currentEvent.id);
-}
+function addGoogleCalendar() { if (currentEvent) addGCalEvent(currentEvent.id); }
 
 // ─── TORNEIOS ───
 function addTorneio() {
-  const nome    = document.getElementById('tNome').value.trim();
-  const data    = document.getElementById('tData').value;
-  const local   = document.getElementById('tLocal').value.trim();
-  const formato = document.getElementById('tFormato').value;
-  if (!nome || !data) { toast('Preencha nome e data!', 'error'); return; }
-  torneios.push({ id: Date.now(), nome, data, local, formato });
+  const nome   = document.getElementById('tNome').value.trim();
+  const data   = document.getElementById('tData').value;
+  const local  = document.getElementById('tLocal').value.trim();
+  const fmt    = document.getElementById('tFormato').value;
+  if (!nome || !data) { toast('Preencha nome e data!','error'); return; }
+  torneios.push({ id:Date.now(), nome, data, local, formato:fmt });
   save(); renderTorneios();
-  document.getElementById('tNome').value  = '';
-  document.getElementById('tData').value  = '';
-  document.getElementById('tLocal').value = '';
+  document.getElementById('tNome').value=''; document.getElementById('tData').value=''; document.getElementById('tLocal').value='';
   toast('Torneio criado! 🏆');
 }
-
 function renderTorneios() {
-  const list = document.getElementById('torneioList');
-  if (!list) return;
-  if (!torneios.length) {
-    list.innerHTML = '<div style="text-align:center;padding:48px;color:var(--gray);font-size:0.9rem;">Nenhum torneio criado ainda 🏆</div>';
-    return;
-  }
-  const fmt = { chave3:'Chave de 3 times', chave4:'Chave de 4 times', dupla:'Duplas', livre:'Livre' };
+  const list = document.getElementById('torneioList'); if (!list) return;
+  if (!torneios.length) { list.innerHTML='<div style="text-align:center;padding:48px;color:var(--gray-m);">Nenhum torneio criado ainda 🏆</div>'; return; }
+  const fmtLabel = {chave3:'Chave de 3',chave4:'Chave de 4',dupla:'Duplas',livre:'Livre'};
   list.innerHTML = torneios.map(t => {
     const dt = new Date(t.data+'T00:00:00').toLocaleDateString('pt-BR');
-    return `
-    <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+    return `<div class="torneio-card">
       <div>
-        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--amber);">${t.nome}</div>
-        <div style="font-size:0.82rem;color:var(--sand);">📅 ${dt} &nbsp;|&nbsp; 📍 ${t.local||'—'} &nbsp;|&nbsp; 🔑 ${fmt[t.formato]||t.formato}</div>
+        <div style="font-family:'Bebas Neue';font-size:1.3rem;color:var(--gold);">${t.nome}</div>
+        <div style="font-size:0.8rem;color:var(--cream);margin-top:4px;">📅 ${dt} &nbsp;|&nbsp; 📍 ${t.local||'—'} &nbsp;|&nbsp; 🔑 ${fmtLabel[t.formato]||t.formato}</div>
       </div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-danger btn-sm" onclick="removeTorneio(${t.id})">✕ Remover</button>
-      </div>
+      <button class="btn btn-danger btn-sm" onclick="removeTorneio(${t.id})">✕ Remover</button>
     </div>`;
   }).join('');
 }
+function removeTorneio(id) { torneios = torneios.filter(t=>t.id!==id); save(); renderTorneios(); renderStats(); toast('Torneio removido'); }
 
-function removeTorneio(id) {
-  torneios = torneios.filter(t => t.id !== id);
-  save(); renderTorneios();
-  toast('Torneio removido');
+// ─── CONQUISTAS ───
+function addConquista() {
+  const titulo    = document.getElementById('cTitulo').value.trim();
+  const data      = document.getElementById('cData').value;
+  const tipo      = document.getElementById('cTipo').value;
+  const descricao = document.getElementById('cDescricao').value.trim();
+  const fotoInp   = document.getElementById('cFoto');
+  if (!titulo) { toast('Informe o título da conquista!','error'); return; }
+
+  const doSave = (photo) => {
+    conquistas.push({ id:Date.now(), titulo, data, tipo, descricao, photo });
+    save(); renderConquistas(); renderAdminConquistas();
+    document.getElementById('cTitulo').value=''; document.getElementById('cData').value='';
+    document.getElementById('cDescricao').value=''; fotoInp.value='';
+    toast('🏆 Conquista registrada!');
+  };
+  if (fotoInp.files[0]) compressImage(fotoInp.files[0], doSave);
+  else doSave('');
+}
+
+function removeConquista(id) { conquistas = conquistas.filter(c=>c.id!==id); save(); renderConquistas(); renderAdminConquistas(); toast('Conquista removida'); }
+
+function buildConquistaCard(c, showAdmin) {
+  const medalLabel = {ouro:'🥇 1º Lugar',prata:'🥈 2º Lugar',bronze:'🥉 3º Lugar',participacao:'🏅 Participação'};
+  const dt = c.data ? new Date(c.data+'T00:00:00').toLocaleDateString('pt-BR',{month:'long',year:'numeric'}) : '';
+  const adminBtn = showAdmin ? `<div style="margin-top:14px;"><button class="btn btn-danger btn-sm" onclick="removeConquista(${c.id})">✕ Remover</button></div>` : '';
+  return `
+  <div class="conquista-card tipo-${c.tipo}">
+    ${c.photo ? `<img src="${c.photo}" class="conquista-photo" alt="${c.titulo}">` : `<div class="conquista-photo-placeholder">${c.tipo==='ouro'?'🥇':c.tipo==='prata'?'🥈':c.tipo==='bronze'?'🥉':'🏅'}</div>`}
+    <div class="conquista-body">
+      <div class="conquista-tipo">${medalLabel[c.tipo]||c.tipo}</div>
+      <h3>${c.titulo}</h3>
+      ${c.descricao ? `<p>${c.descricao}</p>` : ''}
+      ${dt ? `<div class="conquista-data">📅 ${dt}</div>` : ''}
+      ${adminBtn}
+    </div>
+  </div>`;
+}
+
+function renderConquistas() {
+  const grid = document.getElementById('publicConquistaGrid'); if (!grid) return;
+  if (!conquistas.length) { grid.innerHTML='<div style="text-align:center;padding:60px;color:var(--gray-m);grid-column:1/-1;">As conquistas serão exibidas aqui pelo admin. 🏆</div>'; return; }
+  const sorted = [...conquistas].sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  grid.innerHTML = sorted.map(c => buildConquistaCard(c,false)).join('');
+}
+
+function renderAdminConquistas() {
+  const grid = document.getElementById('adminConquistaGrid'); if (!grid) return;
+  if (!conquistas.length) { grid.innerHTML='<div style="text-align:center;padding:48px;color:var(--gray-m);grid-column:1/-1;">Nenhuma conquista registrada ainda 🏆</div>'; return; }
+  const sorted = [...conquistas].sort((a,b) => (b.data||'').localeCompare(a.data||''));
+  grid.innerHTML = sorted.map(c => buildConquistaCard(c,true)).join('');
 }
 
 // ─── STATS ───
@@ -1700,49 +1314,25 @@ function renderStats() {
   const tr = events.filter(e=>e.tipo==='treino').length;
   const to = events.filter(e=>e.tipo==='torneio').length + torneios.length;
   const pl = players.length;
-
-  // Admin stats
-  const s1 = document.getElementById('statJogos');
-  const s2 = document.getElementById('statTorneios');
-  const s3 = document.getElementById('statTreinos');
-  const s4 = document.getElementById('statJogadores');
-  if (s1) s1.textContent = jg;
-  if (s2) s2.textContent = to;
-  if (s3) s3.textContent = tr;
-  if (s4) s4.textContent = pl;
-
-  // Public stats
-  const p1 = document.getElementById('pubStatJogos');
-  const p2 = document.getElementById('pubStatTorneios');
-  const p3 = document.getElementById('pubStatTreinos');
-  const p4 = document.getElementById('pubStatJogadores');
-  if (p1) p1.textContent = jg;
-  if (p2) p2.textContent = to;
-  if (p3) p3.textContent = tr;
-  if (p4) p4.textContent = pl;
+  ['statJogos','pubStatJogos'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=jg; });
+  ['statTorneios','pubStatTorneios'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=to; });
+  ['statTreinos','pubStatTreinos'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=tr; });
+  ['statAtletas','pubStatAtletas'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=pl; });
 }
 
 // ─── RENDER ALL ───
 function renderAll() {
-  renderPlayers();
-  renderEvents();
-  renderPublicEvents();
-  renderStats();
-  renderMultiselect();
-  renderTorneios();
+  renderPlayers(); renderPublicPlayers();
+  renderEvents(); renderPublicEvents();
+  renderStats(); renderMultiselect();
+  renderTorneios(); renderConquistas(); renderAdminConquistas();
+  renderHero();
 }
 
 // ─── INIT ───
 applyAdminState();
 renderAll();
 document.getElementById('evData').value = new Date().toISOString().split('T')[0];
-
-// If admin session restored, show admin nav active on agenda
-if (isAdmin) {
-  // Leave default on agenda
-} else {
-  // default tab already set via HTML class
-}
 </script>
 </body>
 </html>
