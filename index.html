@@ -479,7 +479,7 @@ input[type=file]{padding:8px 10px;cursor:pointer;font-size:0.8rem;}
       <div class="logo-icon">🏐</div>
       <div class="logo-text">
         <h1>VolêiBros</h1>
-        <p id="subtitleText">Time de Elite · Camocim, CE</p>
+        <p id="subtitleText">Time de Elite · Groaíras, CE</p>
       </div>
       <div class="admin-badge">👑 Admin</div>
     </div>
@@ -517,7 +517,7 @@ input[type=file]{padding:8px 10px;cursor:pointer;font-size:0.8rem;}
     <img id="heroImg" class="hero-photo" style="display:none;" alt="Equipe">
     <div class="hero-overlay">
       <h2 id="heroNome">VolêiBros</h2>
-      <p id="heroTagline">Time de Elite · Camocim, CE</p>
+      <p id="heroTagline">Time de Elite · Groaíras, CE</p>
     </div>
   </div>
 
@@ -778,9 +778,9 @@ input[type=file]{padding:8px 10px;cursor:pointer;font-size:0.8rem;}
     <div class="card-title">📝 Informações do Time</div>
     <div class="form-grid">
       <div class="form-group"><label>Nome do Time</label><input id="configNome" type="text" placeholder="VolêiBros"></div>
-      <div class="form-group"><label>Tagline</label><input id="configTagline" type="text" placeholder="Time de Elite · Camocim, CE"></div>
+      <div class="form-group"><label>Tagline</label><input id="configTagline" type="text" placeholder="Time de Elite · Groaíras, CE"></div>
       <div class="form-group"><label>Instagram</label><input id="configInsta" type="text" placeholder="@voleibros"></div>
-      <div class="form-group"><label>Cidade</label><input id="configCidade" type="text" placeholder="Camocim, CE"></div>
+      <div class="form-group"><label>Cidade</label><input id="configCidade" type="text" placeholder="Groaíras, CE"></div>
     </div>
     <div class="form-group" style="margin-top:14px;"><label>Descrição / Apresentação</label><textarea id="configDesc" placeholder="Apresentação do time para o público..."></textarea></div>
     <div class="btn-row"><button class="btn btn-primary" onclick="saveTeamInfo()">💾 Salvar Informações</button></div>
@@ -842,7 +842,7 @@ let BIN_ID = localStorage.getItem('vb_bin_id') || null;
 
 const DEFAULT_DATA = {
   players: [], events: [], torneios: [], conquistas: [],
-  teamInfo: { nome:'VolêiBros', tagline:'Time de Elite · Camocim, CE', descricao:'', instagram:'', cidade:'Camocim, CE' },
+  teamInfo: { nome:'VolêiBros', tagline:'Time de Elite · Groaíras, CE', descricao:'', instagram:'', cidade:'Groaíras, CE' },
   teamPhoto: '',
   adminPass: 'admin123'
 };
@@ -991,7 +991,7 @@ function applyAdminState() {
   const sub = document.getElementById('subtitleText');
   if (sub) sub.textContent = isAdmin
     ? 'Agenda · Atletas · Conquistas · Torneios'
-    : (teamInfo.tagline || 'Time de Elite · Camocim, CE');
+    : (teamInfo.tagline || 'Time de Elite · Groaíras, CE');
 }
 
 // ─── TABS ───
@@ -1067,7 +1067,7 @@ function renderHero() {
   if (photo) { img.src = photo; img.style.display = 'block'; ph.style.display = 'none'; }
   else       { img.style.display = 'none'; ph.style.display = 'flex'; }
   document.getElementById('heroNome').textContent    = teamInfo.nome    || 'VolêiBros';
-  document.getElementById('heroTagline').textContent = teamInfo.tagline || 'Time de Elite · Camocim, CE';
+  document.getElementById('heroTagline').textContent = teamInfo.tagline || 'Time de Elite · Groaíras, CE';
   const descCard = document.getElementById('heroDescCard');
   const descEl   = document.getElementById('heroDesc');
   if (teamInfo.descricao) { descEl.textContent = teamInfo.descricao; descCard.style.display = 'block'; }
