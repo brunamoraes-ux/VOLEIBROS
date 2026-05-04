@@ -834,28 +834,99 @@ input[type=file]{padding:8px 10px;cursor:pointer;font-size:0.8rem;}
 <div id="toast">✅ <span id="toastMsg">Ação realizada!</span></div>
 
 <script>
+// ═══════════════════════════════════════════════════════
+// JSONBIN — banco de dados online (funciona em qualquer navegador/celular)
+// ═══════════════════════════════════════════════════════
+const JSONBIN_KEY = '$2a$10$r5gjx1/qkwa879fGjIc6b.DkGZm7UF3L6m/ZMVyI1Ae7IrxJAF.mq';
+let BIN_ID = localStorage.getItem('vb_bin_id') || null;
+
+const DEFAULT_DATA = {
+  players: [], events: [], torneios: [], conquistas: [],
+  teamInfo: { nome:'VolêiBros', tagline:'Time de Elite · Camocim, CE', descricao:'', instagram:'', cidade:'Camocim, CE' },
+  teamPhoto: '',
+  adminPass: 'admin123'
+};
+
+let db = JSON.parse(JSON.stringify(DEFAULT_DATA));
+
+async function dbLoad() {
+  showLoadingOverlay(true);
+  try {
+    if (!BIN_ID) {
+      // Cria bin novo na primeira vez
+      const r = await fetch('https://api.jsonbin.io/v3/b', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json', 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Name':'voleibros' },
+        body: JSON.stringify(DEFAULT_DATA)
+      });
+      const j = await r.json();
+      BIN_ID = j.metadata.id;
+      localStorage.setItem('vb_bin_id', BIN_ID);
+      db = JSON.parse(JSON.stringify(DEFAULT_DATA));
+    } else {
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_KEY }
+      });
+      const j = await r.json();
+      db = { ...DEFAULT_DATA, ...j.record };
+    }
+  } catch(e) {
+    toast('⚠️ Erro ao carregar dados. Verifique sua conexão.', 'error');
+    db = JSON.parse(JSON.stringify(DEFAULT_DATA));
+  }
+  // Carrega variáveis locais a partir do db
+  players    = db.players    || [];
+  events     = db.events     || [];
+  torneios   = db.torneios   || [];
+  conquistas = db.conquistas || [];
+  teamInfo   = db.teamInfo   || DEFAULT_DATA.teamInfo;
+  showLoadingOverlay(false);
+  renderAll();
+  applyAdminState();
+  document.getElementById('evData').value = new Date().toISOString().split('T')[0];
+}
+
+async function dbSave() {
+  db.players    = players;
+  db.events     = events;
+  db.torneios   = torneios;
+  db.conquistas = conquistas;
+  db.teamInfo   = teamInfo;
+  try {
+    await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type':'application/json', 'X-Master-Key': JSONBIN_KEY },
+      body: JSON.stringify(db)
+    });
+  } catch(e) {
+    toast('⚠️ Erro ao salvar. Verifique sua conexão.', 'error');
+  }
+}
+
+function showLoadingOverlay(show) {
+  let el = document.getElementById('loadingOverlay');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'loadingOverlay';
+    el.innerHTML = `<div style="text-align:center;"><div style="font-size:3rem;animation:spin 1s linear infinite;display:inline-block;">🏐</div><p style="margin-top:16px;font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:3px;color:#C9A84C;">Carregando...</p></div>`;
+    el.style.cssText = 'position:fixed;inset:0;background:rgba(8,8,8,0.95);z-index:99999;display:flex;align-items:center;justify-content:center;';
+    document.body.appendChild(el);
+  }
+  el.style.display = show ? 'flex' : 'none';
+}
+
 // ─── STATE ───
-let players      = JSON.parse(localStorage.getItem('vb_players')      || '[]');
-let events       = JSON.parse(localStorage.getItem('vb_events')       || '[]');
-let torneios     = JSON.parse(localStorage.getItem('vb_torneios')     || '[]');
-let conquistas   = JSON.parse(localStorage.getItem('vb_conquistas')   || '[]');
-let teamInfo     = JSON.parse(localStorage.getItem('vb_team_info')    || JSON.stringify({
-  nome:'VolêiBros', tagline:'Time de Elite · Camocim, CE', descricao:'', instagram:'', cidade:'Camocim, CE'
-}));
+let players      = [];
+let events       = [];
+let torneios     = [];
+let conquistas   = [];
+let teamInfo     = { ...DEFAULT_DATA.teamInfo };
 let selectedParticipants = [];
 let currentEvent = null;
 let isAdmin = sessionStorage.getItem('vb_admin') === 'yes';
 
-// ─── SAVE ───
-function save() {
-  try {
-    localStorage.setItem('vb_players',    JSON.stringify(players));
-    localStorage.setItem('vb_events',     JSON.stringify(events));
-    localStorage.setItem('vb_torneios',   JSON.stringify(torneios));
-    localStorage.setItem('vb_conquistas', JSON.stringify(conquistas));
-    localStorage.setItem('vb_team_info',  JSON.stringify(teamInfo));
-  } catch(e) { toast('⚠️ Armazenamento cheio! Reduza o tamanho das fotos.','error'); }
-}
+// save agora chama dbSave (async, mas não bloqueia UI)
+function save() { dbSave(); }
 
 // ─── COMPRESS IMAGE ───
 function compressImage(file, cb) {
@@ -877,7 +948,7 @@ function compressImage(file, cb) {
 }
 
 // ─── ADMIN AUTH ───
-function getAdminPass() { return localStorage.getItem('vb_admin_pass') || 'admin123'; }
+function getAdminPass() { return db.adminPass || 'admin123'; }
 
 function openAdminLogin() {
   document.getElementById('adminPassInput').value = '';
@@ -905,9 +976,9 @@ function changePassword() {
   const nv  = document.getElementById('newPass').value.trim();
   if (cur !== getAdminPass()) { toast('Senha atual incorreta!','error'); return; }
   if (nv.length < 4) { toast('Nova senha muito curta!','error'); return; }
-  localStorage.setItem('vb_admin_pass', nv);
+  db.adminPass = nv;
   document.getElementById('curPass').value = ''; document.getElementById('newPass').value = '';
-  toast('✅ Senha alterada!');
+  save(); toast('✅ Senha alterada!');
 }
 
 function togglePassVis() {
@@ -917,7 +988,8 @@ function togglePassVis() {
 
 function applyAdminState() {
   document.body.classList.toggle('is-admin', isAdmin);
-  document.getElementById('subtitleText').textContent = isAdmin
+  const sub = document.getElementById('subtitleText');
+  if (sub) sub.textContent = isAdmin
     ? 'Agenda · Atletas · Conquistas · Torneios'
     : (teamInfo.tagline || 'Time de Elite · Camocim, CE');
 }
@@ -955,7 +1027,7 @@ function loadConfigForm() {
   document.getElementById('configInsta').value   = teamInfo.instagram || '';
   document.getElementById('configCidade').value  = teamInfo.cidade  || '';
   document.getElementById('configDesc').value    = teamInfo.descricao || '';
-  const photo = localStorage.getItem('vb_team_photo');
+  const photo = db.teamPhoto || '';
   const prev = document.getElementById('configTeamPhotoPreview');
   if (photo) { prev.src = photo; prev.style.display = 'block'; }
   else { prev.style.display = 'none'; }
@@ -973,8 +1045,8 @@ function saveTeamPhoto() {
   const inp = document.getElementById('configTeamPhoto');
   if (!inp.files[0]) { toast('Selecione uma foto!','error'); return; }
   compressImage(inp.files[0], b64 => {
-    try { localStorage.setItem('vb_team_photo', b64); renderHero(); toast('📸 Foto salva!'); }
-    catch(e) { toast('Foto muito grande! Tente uma menor.','error'); }
+    db.teamPhoto = b64;
+    save(); renderHero(); toast('📸 Foto salva!');
   });
 }
 
@@ -989,7 +1061,7 @@ function saveTeamInfo() {
 }
 
 function renderHero() {
-  const photo = localStorage.getItem('vb_team_photo');
+  const photo = db.teamPhoto || '';
   const img   = document.getElementById('heroImg');
   const ph    = document.getElementById('heroPlaceholder');
   if (photo) { img.src = photo; img.style.display = 'block'; ph.style.display = 'none'; }
@@ -1112,13 +1184,13 @@ function renderTags() {
 
 // ─── EVENTS ───
 function addEvent() {
-  const tipo      = document.getElementById('evTipo').value;
-  const nome      = document.getElementById('evNome').value.trim();
-  const data      = document.getElementById('evData').value;
-  const hora      = document.getElementById('evHora').value;
-  const local     = document.getElementById('evLocal').value.trim();
-  const modalidade= document.getElementById('evModalidade').value;
-  const obs       = document.getElementById('evObs').value.trim();
+  const tipo       = document.getElementById('evTipo').value;
+  const nome       = document.getElementById('evNome').value.trim();
+  const data       = document.getElementById('evData').value;
+  const hora       = document.getElementById('evHora').value;
+  const local      = document.getElementById('evLocal').value.trim();
+  const modalidade = document.getElementById('evModalidade').value;
+  const obs        = document.getElementById('evObs').value.trim();
   if (!nome || !data) { toast('Preencha nome e data!','error'); return; }
   events.push({ id:Date.now(), tipo, nome, data, hora, local, modalidade, obs, participantes:[...selectedParticipants] });
   selectedParticipants = [];
@@ -1228,10 +1300,10 @@ function addGoogleCalendar() { if (currentEvent) addGCalEvent(currentEvent.id); 
 
 // ─── TORNEIOS ───
 function addTorneio() {
-  const nome   = document.getElementById('tNome').value.trim();
-  const data   = document.getElementById('tData').value;
-  const local  = document.getElementById('tLocal').value.trim();
-  const fmt    = document.getElementById('tFormato').value;
+  const nome  = document.getElementById('tNome').value.trim();
+  const data  = document.getElementById('tData').value;
+  const local = document.getElementById('tLocal').value.trim();
+  const fmt   = document.getElementById('tFormato').value;
   if (!nome || !data) { toast('Preencha nome e data!','error'); return; }
   torneios.push({ id:Date.now(), nome, data, local, formato:fmt });
   save(); renderTorneios();
@@ -1331,8 +1403,7 @@ function renderAll() {
 
 // ─── INIT ───
 applyAdminState();
-renderAll();
-document.getElementById('evData').value = new Date().toISOString().split('T')[0];
+dbLoad(); // carrega tudo do JSONBin
 </script>
 </body>
 </html>
