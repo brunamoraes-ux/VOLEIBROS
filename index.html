@@ -837,8 +837,8 @@ input[type=file]{padding:8px 10px;cursor:pointer;font-size:0.8rem;}
 // ═══════════════════════════════════════════════════════
 // JSONBIN — banco de dados online (funciona em qualquer navegador/celular)
 // ═══════════════════════════════════════════════════════
-const JSONBIN_KEY = '$2a$10$r5gjx1/qkwa879fGjIc6b.DkGZm7UF3L6m/ZMVyI1Ae7IrxJAF.mq';
-let BIN_ID = localStorage.getItem('vb_bin_id') || null;
+const JSONBIN_KEY = '$2a$10$DV.TBPF1z7SrDmQuMRTLe.GVHD91eInSJQdav6RFi1hV2dc.OCjGe';
+const BIN_ID = '69f92a2436566621a825f740';
 
 const DEFAULT_DATA = {
   players: [], events: [], torneios: [], conquistas: [],
@@ -852,29 +852,16 @@ let db = JSON.parse(JSON.stringify(DEFAULT_DATA));
 async function dbLoad() {
   showLoadingOverlay(true);
   try {
-    if (!BIN_ID) {
-      // Cria bin novo na primeira vez
-      const r = await fetch('https://api.jsonbin.io/v3/b', {
-        method: 'POST',
-        headers: { 'Content-Type':'application/json', 'X-Master-Key': JSONBIN_KEY, 'X-Bin-Name':'voleibros' },
-        body: JSON.stringify(DEFAULT_DATA)
-      });
-      const j = await r.json();
-      BIN_ID = j.metadata.id;
-      localStorage.setItem('vb_bin_id', BIN_ID);
-      db = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    } else {
-      const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': JSONBIN_KEY }
-      });
-      const j = await r.json();
-      db = { ...DEFAULT_DATA, ...j.record };
-    }
+    const r = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_KEY, 'X-Access-Key': JSONBIN_KEY }
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    db = { ...DEFAULT_DATA, ...j.record };
   } catch(e) {
-    toast('⚠️ Erro ao carregar dados. Verifique sua conexão.', 'error');
+    toast('⚠️ Erro ao carregar: ' + e.message, 'error');
     db = JSON.parse(JSON.stringify(DEFAULT_DATA));
   }
-  // Carrega variáveis locais a partir do db
   players    = db.players    || [];
   events     = db.events     || [];
   torneios   = db.torneios   || [];
